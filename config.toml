@@ -4,7 +4,7 @@ languageCode = "zh"
 # [en, zh, ...] determines which i18n file to use
 defaultContentLanguage = "zh"
 # website title
-title = "LoveIt Theme"
+title = "Jeffrey's Blog"
 # theme
 theme = "LoveIt"
 # whether to use git commit log to generate lastmod record
@@ -74,35 +74,28 @@ dateFormatToUse = "2006-01-02"
 [menu]
   [[menu.main]]
     identifier = "posts"
-    name = "Posts"
+    name = "文章"
     url = "posts"
     weight = 1
 
   [[menu.main]]
     identifier = "tags"
-    name = "Tags"
+    name = "标签"
     url = "tags"
     weight = 2
 
   [[menu.main]]
     identifier = "categories"
-    name = "Categories"
+    name = "分类"
     url = "categories"
     weight = 3
 
   [[menu.main]]
     identifier = "about"
-    name = "About"
+    name = "关于"
     url = "about"
     weight = 4
 
-  [[menu.main]]
-    identifier = "zh"
-    pre = '<i class="fas fa-language fa-fw"></i>'
-    name = ""
-    title = "简体中文"
-    url = "https://hugo-loveit-zh.netlify.com"
-    weight = 5
 
 [params]
   # LoveIt theme version
@@ -122,7 +115,7 @@ dateFormatToUse = "2006-01-02"
   ## URL of avatar shown in home page
   avatar = "images/avatar.png"
   ## subtitle shown in home page
-  subtitle = "A Clean, Elegant but Advanced Hugo Theme"
+  subtitle = "努力加油💪"
 
   # whether to show social share links in post page
   socialShare = true
@@ -192,13 +185,13 @@ dateFormatToUse = "2006-01-02"
 
   # Social Info in home page
   [params.social]
-    GitHub = "xxxx"
-    Linkedin = "xxxx"
-    Twitter = "xxxx"
+    GitHub = "https://github.com/aheling11"
+    #Linkedin = "xxxx"
+    #Twitter = "xxxx"
     #Instagram = "xxxx"
-    Email = "xxxx@outlook.com"
-    Facebook = "xxxx"
-    Telegram = "xxxx"
+    Email = "aheling11@gmail.com"
+    #Facebook = "xxxx"
+    #Telegram = "xxxx"
     #Medium = "xxxx"
     #Gitlab = "xxxx"
     #Youtubelegacy = "xxxx"
@@ -268,7 +261,7 @@ dateFormatToUse = "2006-01-02"
     #Mix = true
     #Tumblr = true
     #VKontakte = true
-    #Weibo = true
+    Weibo = true
 
   # Publisher Info just for SEO
   [params.publisher]

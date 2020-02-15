@@ -1,4 +1,4 @@
-baseURL = "https://aheling11.github.io/personal-site/"
+baseURL = "/"
 # website language
 languageCode = "zh"
 # [en, zh, ...] determines which i18n file to use
@@ -24,7 +24,6 @@ copyright = "This work is licensed under a Creative Commons Attribution-NonComme
 # date format
 dateFormatToUse = "2006-01-02"
 
-publishDir = "docs"
 
 # Markup related configuration in Hugo
 [markup]

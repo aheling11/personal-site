@@ -320,22 +320,108 @@ draft: false
 
    ​		 n = 1011, n - 1 = 1010, (n-1)&n = 1010
 
+### Solution
 
+```java
+public static int NumberOf1(int n) {
+        int cnt = 0;
+        while (n != 0){ // 循环终止条件就是n==0，因为最终n中所有位数都会变成0
+            cnt++;
+            n = (n - 1) & n;
+        }
+        System.out.println(cnt);
+        return cnt;
+    }
+```
+
+## 5. 快速幂
+
+### 问题描述
+
+> 实现 pow(x, n) ，即计算 x 的 n 次幂函数。
+>
+> 示例 1:
+>
+> 输入: 2.00000, 10
+> 输出: 1024.00000
+> 示例 2:
+>
+> 输入: 2.10000, 3
+> 输出: 9.26100
+> 示例 3:
+>
+> 输入: 2.00000, -2
+> 输出: 0.25000
+> 解释: 2-2 = 1/22 = 1/4 = 0.25
+> 说明:
+>
+> -100.0 < x < 100.0
+> n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
+>
+> 来源：力扣（LeetCode）
+> 链接：https://leetcode-cn.com/problems/powx-n
+
+### 问题分析
+
+方法1: 暴力，直观想法，模拟该过程，将x连续乘n次
+
+方法2: 快速幂递归版本。
+
+x^(n) = x^(n / 2) * x^(n / 2), n为偶数。
+
+x^(n) = x^((n - 1)/ 2) * x^((n - 1)/ 2) * x, n为奇数。
+
+方法3: 快速幂迭代版本。
 
 ### Solution
 
-1. 二分查找
+1. 快速幂递归版本
 
    ```java
-   public static int NumberOf1(int n) {
-           int cnt = 0;
-           while (n != 0){ // 循环终止条件就是n==0，因为最终n中所有位数都会变成0
-               cnt++;
-               n = (n - 1) & n;
+   		public double myPow(double x, int n) {
+           return help(x, (long)(n));
+       }
+   
+       public double help(double x, long n){
+           if(n == 0) return 1;
+           if(n == 1) return x;
+           int flag = 1;
+           if(n < 0){
+               n = ~n + 1;
+               flag = 0;
            }
-           System.out.println(cnt);
-           return cnt;
+           double result = help(x, n/2);
+           if((n & 1) == 0){
+               result *= result;
+           } else {
+               result *= result;
+               result *= x;
+           }
+           return flag == 0 ? 1 / result : result;
        }
    ```
 
    
+
+2. 快速幂迭代版本
+
+```java
+public double myPow(double x, int n) {
+        double base = x;
+        double ans = 1;
+        long t = n;
+  			//位运算，取绝对值
+        if (t < 0) {
+            t = ~t + 1;
+        }
+        while(t != 0){
+            if((t & 1) == 1) {
+                ans *= base;
+            } 
+            base  = base * base;
+            t >>= 1;
+        }
+        return n < 0 ? 1 / ans : ans;
+    }
+```
+

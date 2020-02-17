@@ -185,7 +185,7 @@ dateFormatToUse = "2006-01-02"
 
   # Social Info in home page
   [params.social]
-    GitHub = "https://github.com/aheling11"
+    GitHub = "aheling11"
     #Linkedin = "xxxx"
     #Twitter = "xxxx"
     #Instagram = "xxxx"

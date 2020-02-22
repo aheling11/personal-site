@@ -405,23 +405,287 @@ x^(n) = x^((n - 1)/ 2) * x^((n - 1)/ 2) * x, n为奇数。
 
 2. 快速幂迭代版本
 
+   ```java
+   public double myPow(double x, int n) {
+           double base = x;
+           double ans = 1;
+           long t = n;
+     			//位运算，取绝对值
+           if (t < 0) {
+               t = ~t + 1;
+           }
+           while(t != 0){
+               if((t & 1) == 1) {
+                   ans *= base;
+               } 
+               base  = base * base;
+               t >>= 1;
+           }
+           return n < 0 ? 1 / ans : ans;
+       }
+   ```
+
+   
+
+## 6. 树的子结构
+
+### 问题描述
+
+> 输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)
+>
+> B是A的子结构， 即 A中有出现和B相同的结构和节点值。
+>
+> 例如:
+> 给定的树 A:
+>
+> ​     3
+> ​    / \
+>
+>    4   5
+>   / \
+>  1   2
+> 给定的树 B：
+>
+>    4 
+>   /
+>  1
+> 返回 true，因为 B 与 A 的一个子树拥有相同的结构和节点值。
+>
+> 示例 1：
+>
+> 输入：A = [1,2,3], B = [3,1]
+> 输出：false
+> 示例 2：
+>
+> 输入：A = [3,4,5,1,2], B = [4,1]
+> 输出：true
+> 限制：
+>
+> 0 <= 节点个数 <= 10000
+>
+> 来源：力扣（LeetCode）
+> 链接：https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof
+
+### 问题分析
+
+思路很直接，遍历树A，如果有节点与B的根节点值相同，判断该节点下是否包含B树。遍历使用递归实现会很方便。
+
+### Solution
+
+1. 递归
+
+   ```java
+   	public boolean isSubStructure(TreeNode A, TreeNode B) {
+           if (A == null || B == null){
+               return false;
+           }
+           boolean result = false;
+           if (A.val == B.val){
+               result = DoesAHaveB(A, B);
+           }
+           if (!result) result = isSubStructure(A.left, B);
+           if (!result) result = isSubStructure(A.right, B);
+           return result;
+      }
+   	//A树B树一起遍历
+        public static boolean DoesAHaveB(TreeNode A, TreeNode B){
+          //如果B被遍历完了说明符合条件
+           if (B == null){
+               return true;
+           }
+          //如果B没被遍历完，A遍历完了，说明B比A树更大，返回FALSE
+           if (A == null){
+               return false;
+           }
+           if (A.val != B.val){
+               return false;
+           }
+           return DoesAHaveB(A.left, B.left) && DoesAHaveB(A.right, B.right);
+   
+       }
+   ```
+
+
+## 7. 二叉树的镜像
+
+### 问题描述
+
+> 请完成一个函数，输入一个二叉树，该函数输出它的镜像。
+>
+> 例如输入：
+>
+> ​     4
+>
+>    /   \
+>   2     7
+>  / \   / \
+> 1   3 6   9
+> 镜像输出：
+>
+> ​     4
+>
+>    /   \
+>   7     2
+>  / \   / \
+> 9   6 3   1
+>
+>  
+>
+> 示例 1：
+>
+> 输入：root = [4,2,7,1,3,6,9]
+> 输出：[4,7,2,9,6,3,1]
+>
+>
+> 限制：
+>
+> 0 <= 节点个数 <= 1000
+>
+> 来源：力扣（LeetCode）
+> 链接：https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof
+>
+
+### 问题分析
+
+思路很直接，遍历树，每次遍历时交换left和right节点。
+
+### Solution
+
+我的解法
+
 ```java
-public double myPow(double x, int n) {
-        double base = x;
-        double ans = 1;
-        long t = n;
-  			//位运算，取绝对值
-        if (t < 0) {
-            t = ~t + 1;
+	 public TreeNode mirrorTree(TreeNode root) {
+        if(root == null){
+            return root;
         }
-        while(t != 0){
-            if((t & 1) == 1) {
-                ans *= base;
-            } 
-            base  = base * base;
-            t >>= 1;
+        help(root);
+        return root;
+    }
+
+    public void help(TreeNode root){
+        if(root == null){
+            return;
         }
-        return n < 0 ? 1 / ans : ans;
+        TreeNode t = root.left;
+        root.left = root.right;
+        root.right = t;
+        help(root.left);
+        help(root.right);
     }
 ```
+
+更简便的解法：
+
+```java
+ public TreeNode mirrorTree(TreeNode root) {
+    if(root == null){
+            return null;
+    }
+    TreeNode t = root.left;
+    root.left = mirrorTree(root.right);
+    root.right = mirrorTree(t);
+    return root;
+}
+
+```
+## 8. 对称二叉树
+
+### 问题描述
+
+> 给定一个二叉树，检查它是否是镜像对称的。
+>
+> 例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+>
+> ​    1
+>
+>    / \
+>   2   2
+>  / \ / \
+> 3  4 4  3
+> 但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+>
+> ​    1
+>
+>    / \
+>   2   2
+>    \   \
+>    3    3
+> 说明:
+>
+> 如果你可以运用递归和迭代两种方法解决这个问题，会很加分。
+>
+> 来源：力扣（LeetCode）
+> 链接：https://leetcode-cn.com/problems/symmetric-tree
+
+### 问题分析
+
+关键字：遍历，递归，队列
+
+解这道题的关键在于，同时遍历节点的两边，镜像遍历。
+
+前序遍历是根左右，我们可以改一下前序遍历，得到一种根右左的遍历方式，以这两种遍历方式同时遍历，节点的值不相等时返回false，遍历完没有返回false则返回true。
+
+### Solution
+
+1. 递归解法
+
+   ```java
+   public boolean isSymmetric(TreeNode root) {
+           if(root == null){
+               return true;
+           }
+           return isSymmetric(root.left, root.right);
+       }
+       public boolean isSymmetric(TreeNode root1, TreeNode root2) {
+           if(root1 == null && root2 == null){
+               return true;
+           }
+         //说明两边长度不一样。
+           if(root1 == null || root2 == null){
+               return false;
+           }
+           if(root1.val != root2.val){
+               return false;
+           }
+         
+           return isSymmetric(root1.left, root2.right) && isSymmetric(root1.right, root2.left);
+       }
+   ```
+
+   
+
+2. 非递归解法
+
+   ```java
+   public boolean isSysmmetric_nonrecur(TreeNode root){
+           if(root == null){
+               return true;
+           }
+           Queue<TreeNode> queue = new LinkedList<>();
+           queue.add(root);
+           queue.add(root);
+           while (!queue.isEmpty()){
+               TreeNode cur1 = queue.poll();
+               TreeNode cur2 = queue.poll();
+               if(cur1 == null && cur2 == null){
+                   continue;
+               }
+               if (cur1 == null || cur2 == null){
+                   return false;
+               }
+               if (cur1.val != cur2.val){
+                   return false;
+               }
+               queue.add(cur1.left);
+               queue.add(cur2.right);
+               queue.add(cur1.right);
+               queue.add(cur2.left);
+           }
+           return true;
+       }
+   ```
+
+   
+
+
 

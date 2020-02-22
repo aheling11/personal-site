@@ -56,7 +56,7 @@ Solution   基于partition的方法
                 "url": "\/cover.png",
                 "width":  800 ,
                 "height":  600 
-            },"genre": "posts","keywords": "算法, 数据结构","wordcount":  1122 ,
+            },"genre": "posts","keywords": "算法, 数据结构","wordcount":  1638 ,
         "url": "\/2020\/02\/fre-ques\/","datePublished": "2020-02-15T22:09:16\x2b08:00","dateModified": "2020-02-15T22:09:16\x2b08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
                 "@type": "Organization",
                 "name": "xxxx",
@@ -102,8 +102,8 @@ Solution   基于partition的方法
                     <i class="fas fa-user-circle fa-fw"></i>HeLing
                 </a>&nbsp;<span class="post-category">收录于&nbsp;<i class="far fa-folder fa-fw"></i><a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a>&nbsp;</span></div>
             <div class="meta-line"><i class="far fa-calendar-alt fa-fw"></i><time datetime=2020-02-15>2020-02-15</time>&nbsp;
-                <i class="fas fa-pencil-alt fa-fw"></i>约 1122 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>预计阅读 6 分钟&nbsp;</div>
+                <i class="fas fa-pencil-alt fa-fw"></i>约 1638 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>预计阅读 8 分钟&nbsp;</div>
         </div><div class="content"><h1 id="heading">常见题</h1>
 <a class="post-dummy-target" id="1-k"></a><h2>1. 寻找第K大的值</h2>
 <a class="post-dummy-target" id="heading1"></a><h3>问题描述</h3>
@@ -663,8 +663,6 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。</p>
 </div></li>
 <li>
 <p>快速幂迭代版本</p>
-</li>
-</ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -690,7 +688,7 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。</p>
         <span class="kt">double</span> <span class="n">base</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
         <span class="kt">double</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">1</span><span class="o">;</span>
         <span class="kt">long</span> <span class="n">t</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span>
-  			<span class="c1">//位运算，取绝对值
+             <span class="c1">//位运算，取绝对值
 </span><span class="c1"></span>        <span class="k">if</span> <span class="o">(</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">t</span> <span class="o">=</span> <span class="o">~</span><span class="n">t</span> <span class="o">+</span> <span class="n">1</span><span class="o">;</span>
         <span class="o">}</span>
@@ -705,7 +703,342 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。</p>
     <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div></div><div class="post-footer" id="post-footer">
+</div></li>
+</ol>
+<a class="post-dummy-target" id="6-"></a><h2>6. 树的子结构</h2>
+<a class="post-dummy-target" id="heading11"></a><h3>问题描述</h3>
+<blockquote>
+<p>输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)</p>
+<p>B是A的子结构， 即 A中有出现和B相同的结构和节点值。</p>
+<p>例如:
+给定的树 A:</p>
+<p>​     3
+​    / \</p>
+<p>4   5
+/<br>
+1   2
+给定的树 B：</p>
+<p>4
+/
+1
+返回 true，因为 B 与 A 的一个子树拥有相同的结构和节点值。</p>
+<p>示例 1：</p>
+<p>输入：A = [1,2,3], B = [3,1]
+输出：false
+示例 2：</p>
+<p>输入：A = [3,4,5,1,2], B = [4,1]
+输出：true
+限制：</p>
+<p>0 &lt;= 节点个数 &lt;= 10000</p>
+<p>来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof</p>
+</blockquote>
+<a class="post-dummy-target" id="heading12"></a><h3>问题分析</h3>
+<p>思路很直接，遍历树A，如果有节点与B的根节点值相同，判断该节点下是否包含B树。遍历使用递归实现会很方便。</p>
+<a class="post-dummy-target" id="solution5"></a><h3>Solution</h3>
+<ol>
+<li>
+<p>递归</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"> <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isSubStructure</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">A</span><span class="o">,</span> <span class="n">TreeNode</span> <span class="n">B</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">A</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span> <span class="o">|</span><span class="o">|</span> <span class="n">B</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">boolean</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">A</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span><span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="na">val</span><span class="o">)</span><span class="o">{</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">DoesAHaveB</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="n">B</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="o">!</span><span class="n">result</span><span class="o">)</span> <span class="n">result</span> <span class="o">=</span> <span class="n">isSubStructure</span><span class="o">(</span><span class="n">A</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">B</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="o">!</span><span class="n">result</span><span class="o">)</span> <span class="n">result</span> <span class="o">=</span> <span class="n">isSubStructure</span><span class="o">(</span><span class="n">A</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">B</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+   <span class="o">}</span>
+ <span class="c1">//A树B树一起遍历
+</span><span class="c1"></span>     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">DoesAHaveB</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">A</span><span class="o">,</span> <span class="n">TreeNode</span> <span class="n">B</span><span class="o">)</span><span class="o">{</span>
+       <span class="c1">//如果B被遍历完了说明符合条件
+</span><span class="c1"></span>        <span class="k">if</span> <span class="o">(</span><span class="n">B</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+       <span class="c1">//如果B没被遍历完，A遍历完了，说明B比A树更大，返回FALSE
+</span><span class="c1"></span>        <span class="k">if</span> <span class="o">(</span><span class="n">A</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">A</span><span class="o">.</span><span class="na">val</span> <span class="o">!</span><span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="na">val</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">DoesAHaveB</span><span class="o">(</span><span class="n">A</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">B</span><span class="o">.</span><span class="na">left</span><span class="o">)</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">DoesAHaveB</span><span class="o">(</span><span class="n">A</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">B</span><span class="o">.</span><span class="na">right</span><span class="o">)</span><span class="o">;</span>
+   
+    <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<a class="post-dummy-target" id="7-"></a><h2>7. 二叉树的镜像</h2>
+<a class="post-dummy-target" id="heading13"></a><h3>问题描述</h3>
+<blockquote>
+<p>请完成一个函数，输入一个二叉树，该函数输出它的镜像。</p>
+<p>例如输入：</p>
+<p>​     4</p>
+<p>/  <br>
+2     7
+/ \   /<br>
+1   3 6   9
+镜像输出：</p>
+<p>​     4</p>
+<p>/  <br>
+7     2
+/ \   /<br>
+9   6 3   1</p>
+<p>示例 1：</p>
+<p>输入：root = [4,2,7,1,3,6,9]
+输出：[4,7,2,9,6,3,1]</p>
+<p>限制：</p>
+<p>0 &lt;= 节点个数 &lt;= 1000</p>
+<p>来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof</p>
+</blockquote>
+<a class="post-dummy-target" id="heading14"></a><h3>问题分析</h3>
+<p>思路很直接，遍历树，每次遍历时交换left和right节点。</p>
+<a class="post-dummy-target" id="solution6"></a><h3>Solution</h3>
+<p>我的解法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java">	 <span class="kd">public</span> <span class="n">TreeNode</span> <span class="nf">mirrorTree</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">root</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">help</span><span class="o">(</span><span class="n">root</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">help</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">root</span><span class="o">)</span><span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">root</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">TreeNode</span> <span class="n">t</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">;</span>
+        <span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
+        <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">t</span><span class="o">;</span>
+        <span class="n">help</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">help</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>更简便的解法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"> <span class="kd">public</span> <span class="n">TreeNode</span> <span class="nf">mirrorTree</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">root</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="n">TreeNode</span> <span class="n">t</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">;</span>
+    <span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">mirrorTree</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">)</span><span class="o">;</span>
+    <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">mirrorTree</span><span class="o">(</span><span class="n">t</span><span class="o">)</span><span class="o">;</span>
+    <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
+<span class="o">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><a class="post-dummy-target" id="8-"></a><h2>8. 对称二叉树</h2>
+<a class="post-dummy-target" id="heading15"></a><h3>问题描述</h3>
+<blockquote>
+<p>给定一个二叉树，检查它是否是镜像对称的。</p>
+<p>例如，二叉树 [1,2,2,3,4,4,3] 是对称的。</p>
+<p>​    1</p>
+<p>/<br>
+2   2
+/ \ /<br>
+3  4 4  3
+但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:</p>
+<p>​    1</p>
+<p>/<br>
+2   2
+\  <br>
+3    3
+说明:</p>
+<p>如果你可以运用递归和迭代两种方法解决这个问题，会很加分。</p>
+<p>来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/symmetric-tree</p>
+</blockquote>
+<a class="post-dummy-target" id="heading16"></a><h3>问题分析</h3>
+<p>关键字：遍历，递归，队列</p>
+<p>解这道题的关键在于，同时遍历节点的两边，镜像遍历。</p>
+<p>前序遍历是根左右，我们可以改一下前序遍历，得到一种根右左的遍历方式，以这两种遍历方式同时遍历，节点的值不相等时返回false，遍历完没有返回false则返回true。</p>
+<a class="post-dummy-target" id="solution7"></a><h3>Solution</h3>
+<ol>
+<li>
+<p>递归解法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isSymmetric</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">root</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">isSymmetric</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isSymmetric</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">root1</span><span class="o">,</span> <span class="n">TreeNode</span> <span class="n">root2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">root1</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">root2</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+      <span class="c1">//说明两边长度不一样。
+</span><span class="c1"></span>        <span class="k">if</span><span class="o">(</span><span class="n">root1</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span> <span class="o">|</span><span class="o">|</span> <span class="n">root2</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">root1</span><span class="o">.</span><span class="na">val</span> <span class="o">!</span><span class="o">=</span> <span class="n">root2</span><span class="o">.</span><span class="na">val</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+         
+        <span class="k">return</span> <span class="n">isSymmetric</span><span class="o">(</span><span class="n">root1</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">root2</span><span class="o">.</span><span class="na">right</span><span class="o">)</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">isSymmetric</span><span class="o">(</span><span class="n">root1</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">root2</span><span class="o">.</span><span class="na">left</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>非递归解法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isSysmmetric_nonrecur</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">root</span><span class="o">)</span><span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">root</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">Queue</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="o">!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="o">)</span><span class="o">)</span><span class="o">{</span>
+            <span class="n">TreeNode</span> <span class="n">cur1</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">TreeNode</span> <span class="n">cur2</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">cur1</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">cur2</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cur1</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span> <span class="o">|</span><span class="o">|</span> <span class="n">cur2</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cur1</span><span class="o">.</span><span class="na">val</span> <span class="o">!</span><span class="o">=</span> <span class="n">cur2</span><span class="o">.</span><span class="na">val</span><span class="o">)</span><span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">cur1</span><span class="o">.</span><span class="na">left</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">cur2</span><span class="o">.</span><span class="na">right</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">cur1</span><span class="o">.</span><span class="na">right</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">cur2</span><span class="o">.</span><span class="na">left</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+</div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">

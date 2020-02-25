@@ -56,7 +56,7 @@ Solution   基于partition的方法
                 "url": "\/cover.png",
                 "width":  800 ,
                 "height":  600 
-            },"genre": "posts","keywords": "算法, 数据结构","wordcount":  1638 ,
+            },"genre": "posts","keywords": "算法, 数据结构","wordcount":  1934 ,
         "url": "\/2020\/02\/fre-ques\/","datePublished": "2020-02-15T22:09:16\x2b08:00","dateModified": "2020-02-15T22:09:16\x2b08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
                 "@type": "Organization",
                 "name": "xxxx",
@@ -102,8 +102,8 @@ Solution   基于partition的方法
                     <i class="fas fa-user-circle fa-fw"></i>HeLing
                 </a>&nbsp;<span class="post-category">收录于&nbsp;<i class="far fa-folder fa-fw"></i><a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a>&nbsp;</span></div>
             <div class="meta-line"><i class="far fa-calendar-alt fa-fw"></i><time datetime=2020-02-15>2020-02-15</time>&nbsp;
-                <i class="fas fa-pencil-alt fa-fw"></i>约 1638 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>预计阅读 8 分钟&nbsp;</div>
+                <i class="fas fa-pencil-alt fa-fw"></i>约 1934 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>预计阅读 10 分钟&nbsp;</div>
         </div><div class="content"><h1 id="heading">常见题</h1>
 <a class="post-dummy-target" id="1-k"></a><h2>1. 寻找第K大的值</h2>
 <a class="post-dummy-target" id="heading1"></a><h3>问题描述</h3>
@@ -1033,6 +1033,157 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。</p>
             <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">cur2</span><span class="o">.</span><span class="na">left</span><span class="o">)</span><span class="o">;</span>
         <span class="o">}</span>
         <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<a class="post-dummy-target" id="9-"></a><h2>9. 最多可以参加的会议数目</h2>
+<a class="post-dummy-target" id="heading17"></a><h3>问题描述</h3>
+<blockquote>
+<p>给你一个数组 events，其中 events[i] = [startDayi, endDayi] ，表示会议 i 开始于 startDayi ，结束于 endDayi 。</p>
+<p>你可以在满足 startDayi &lt;= d &lt;= endDayi 中的任意一天 d 参加会议 i 。注意，一天只能参加一个会议。</p>
+<p>请你返回你可以参加的 最大 会议数目。</p>
+<p>输入：events = [[1,2],[2,3],[3,4]]
+输出：3
+解释：你可以参加所有的三个会议。
+安排会议的一种方案如上图。
+第 1 天参加第一个会议。
+第 2 天参加第二个会议。
+第 3 天参加第三个会议。
+示例 2：</p>
+<p>输入：events= [[1,2],[2,3],[3,4],[1,2]]
+输出：4
+示例 3：</p>
+<p>输入：events = [[1,4],[4,4],[2,2],[3,4],[1,1]]
+输出：4
+示例 4：</p>
+<p>输入：events = [[1,100000]]
+输出：1
+示例 5：</p>
+<p>输入：events = [[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7]]
+输出：7</p>
+<p>提示：</p>
+<p>1 &lt;= events.length &lt;= 10^5
+events[i].length == 2
+1 &lt;= events[i][0] &lt;= events[i][1] &lt;= 10^5</p>
+<p>来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/maximum-number-of-events-that-can-be-attended</p>
+</blockquote>
+<a class="post-dummy-target" id="heading18"></a><h3>问题分析</h3>
+<p>关键字：贪心，set，排序</p>
+<p>这题直观的想法是贪心，时间复杂度是O(n*n)，进阶的做法是优先队列，可以优化到O(n * logn)。</p>
+<p>首先根据会议结束时间对会议events进行排序，结束时间最早的会议优先参加。由于每天只能参加一个会议，所以可以用set存储参加过的天数。</p>
+<a class="post-dummy-target" id="solution8"></a><h3>Solution</h3>
+<ol>
+<li>
+<p>我的解法：用数组来存储参加过会议的天数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Number</span> <span class="kd">implements</span> <span class="n">Comparable</span><span class="o">&lt;</span><span class="n">Number</span><span class="o">&gt;</span><span class="o">{</span>
+        <span class="n">Integer</span> <span class="n">data</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">index</span><span class="o">;</span>
+        <span class="kd">public</span> <span class="nf">Number</span><span class="o">(</span><span class="n">Integer</span> <span class="n">data</span><span class="o">,</span> <span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">index</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compareTo</span><span class="o">(</span><span class="n">Number</span> <span class="n">number</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">number</span><span class="o">.</span><span class="na">data</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">maxEvents</span><span class="o">(</span><span class="kt">int</span><span class="o">[</span><span class="o">]</span><span class="o">[</span><span class="o">]</span> <span class="n">events</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Number</span><span class="o">[</span><span class="o">]</span> <span class="n">sorted</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Number</span><span class="o">[</span><span class="n">events</span><span class="o">.</span><span class="na">length</span><span class="o">]</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">events</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sorted</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Number</span><span class="o">(</span><span class="n">events</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="o">,</span> <span class="n">i</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">sorted</span><span class="o">)</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">occupiedDays</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">10001</span><span class="o">]</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">Number</span> <span class="n">number</span> <span class="o">:</span> <span class="n">sorted</span><span class="o">)</span><span class="o">{</span>
+            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">number</span><span class="o">.</span><span class="na">index</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">events</span><span class="o">[</span><span class="n">index</span><span class="o">]</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span><span class="o">=</span> <span class="n">events</span><span class="o">[</span><span class="n">index</span><span class="o">]</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="o">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">occupiedDays</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span><span class="o">=</span> <span class="n">0</span><span class="o">)</span><span class="o">{</span>
+                    <span class="n">occupiedDays</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">1</span><span class="o">;</span>
+                    <span class="n">sum</span><span class="o">+</span><span class="o">+</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">sum</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>更简洁的写法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxEvents</span><span class="o">(</span><span class="kt">int</span><span class="o">[</span><span class="o">]</span><span class="o">[</span><span class="o">]</span> <span class="n">events</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">events</span><span class="o">,</span> <span class="o">(</span><span class="n">o1</span> <span class="o">,</span> <span class="n">o2</span><span class="o">)</span> <span class="o">-</span><span class="o">&gt;</span> <span class="n">o1</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">-</span> <span class="n">o2</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">set</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">event</span> <span class="o">:</span> <span class="n">events</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">event</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">e</span> <span class="o">=</span> <span class="n">event</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span><span class="o">=</span> <span class="n">e</span><span class="o">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="o">!</span><span class="n">set</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">i</span><span class="o">)</span><span class="o">)</span><span class="o">{</span>
+                    <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">)</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">set</span><span class="o">.</span><span class="na">size</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
     <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>

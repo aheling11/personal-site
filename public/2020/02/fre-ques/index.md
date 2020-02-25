@@ -678,4 +678,120 @@ x^(n) = x^((n - 1)/ 2) * x^((n - 1)/ 2) * x, n为奇数。
 
 
 
+## 9. 最多可以参加的会议数目
+
+### 问题描述
+
+> 给你一个数组 events，其中 events[i] = [startDayi, endDayi] ，表示会议 i 开始于 startDayi ，结束于 endDayi 。
+>
+> 你可以在满足 startDayi <= d <= endDayi 中的任意一天 d 参加会议 i 。注意，一天只能参加一个会议。
+>
+> 请你返回你可以参加的 最大 会议数目。
+>
+> 
+> 输入：events = [[1,2],[2,3],[3,4]]
+> 输出：3
+> 解释：你可以参加所有的三个会议。
+> 安排会议的一种方案如上图。
+> 第 1 天参加第一个会议。
+> 第 2 天参加第二个会议。
+> 第 3 天参加第三个会议。
+> 示例 2：
+>
+> 输入：events= [[1,2],[2,3],[3,4],[1,2]]
+> 输出：4
+> 示例 3：
+>
+> 输入：events = [[1,4],[4,4],[2,2],[3,4],[1,1]]
+> 输出：4
+> 示例 4：
+>
+> 输入：events = [[1,100000]]
+> 输出：1
+> 示例 5：
+>
+> 输入：events = [[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7]]
+> 输出：7
+>
+>
+> 提示：
+>
+> 1 <= events.length <= 10^5
+> events[i].length == 2
+> 1 <= events[i][0] <= events[i][1] <= 10^5
+>
+> 来源：力扣（LeetCode）
+> 链接：https://leetcode-cn.com/problems/maximum-number-of-events-that-can-be-attended
+
+### 问题分析
+
+关键字：贪心，set，排序
+
+这题直观的想法是贪心，时间复杂度是O(n*n)，进阶的做法是优先队列，可以优化到O(n * logn)。
+
+首先根据会议结束时间对会议events进行排序，结束时间最早的会议优先参加。由于每天只能参加一个会议，所以可以用set存储参加过的天数。	
+
+### Solution
+
+1. 我的解法：用数组来存储参加过会议的天数。
+
+   ```java
+   	static class Number implements Comparable<Number>{
+           Integer data;
+           int index;
+           public Number(Integer data, int index) {
+               this.data = data;
+               this.index = index;
+           }
+           @Override
+           public int compareTo(Number number) {
+               return data.compareTo(number.data);
+           }
+       }
+       public static int maxEvents(int[][] events) {
+           Number[] sorted = new Number[events.length];
+           for (int i = 0; i < events.length; i++) {
+               sorted[i] = new Number(events[i][1], i);
+           }
+           Arrays.sort(sorted);
+           int[] occupiedDays = new int[10001];
+           int sum = 0;
+           for(Number number : sorted){
+               int index = number.index;
+               for (int i = events[index][0]; i <= events[index][1]; i++) {
+                   if (occupiedDays[i] == 0){
+                       occupiedDays[i] = 1;
+                       sum++;
+                       break;
+                   }
+               }
+           }
+           return sum;
+       }
+   ```
+
+   
+
+2. 更简洁的写法
+
+   ```java
+   public int maxEvents(int[][] events) {
+           Arrays.sort(events, (o1 , o2) -> o1[1] - o2[1]);
+           Set<Integer> set = new HashSet<>();
+           for (int[] event : events) {
+               int s = event[0];
+               int e = event[1];
+               for (int i = s; i <= e; i++) {
+                   if (!set.contains(i)){
+                       set.add(i);
+                       break;
+                   }
+               }
+           }
+           return set.size();
+       }
+   ```
+
+   
+
 

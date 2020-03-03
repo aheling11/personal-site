@@ -12,6 +12,10 @@ categories: [
 draft: false
 ---
 
+[TOC]
+
+
+
 # 常见题
 
 ## 1. 寻找第K大的值

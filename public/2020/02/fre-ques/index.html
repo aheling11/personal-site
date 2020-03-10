@@ -58,7 +58,7 @@ Solution   基于partition的方法
                 "url": "\/cover.png",
                 "width":  800 ,
                 "height":  600 
-            },"genre": "posts","keywords": "算法, 数据结构","wordcount":  1935 ,
+            },"genre": "posts","keywords": "算法, 数据结构","wordcount":  2170 ,
         "url": "\/2020\/02\/fre-ques\/","datePublished": "2020-02-15T22:09:16\x2b08:00","dateModified": "2020-02-15T22:09:16\x2b08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
                 "@type": "Organization",
                 "name": "xxxx",
@@ -104,8 +104,8 @@ Solution   基于partition的方法
                     <i class="fas fa-user-circle fa-fw"></i>HeLing
                 </a>&nbsp;<span class="post-category">收录于&nbsp;<i class="far fa-folder fa-fw"></i><a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a>&nbsp;</span></div>
             <div class="meta-line"><i class="far fa-calendar-alt fa-fw"></i><time datetime=2020-02-15>2020-02-15</time>&nbsp;
-                <i class="fas fa-pencil-alt fa-fw"></i>约 1935 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>预计阅读 10 分钟&nbsp;</div>
+                <i class="fas fa-pencil-alt fa-fw"></i>约 2170 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>预计阅读 11 分钟&nbsp;</div>
         </div><div class="content"><p>[TOC]</p>
 <h1 id="heading">常见题</h1>
 <a class="post-dummy-target" id="1-k"></a><h2>1. 寻找第K大的值</h2>
@@ -283,10 +283,16 @@ Solution   基于partition的方法
 </blockquote>
 <a class="post-dummy-target" id="heading4"></a><h3>问题分析</h3>
 <p>这道题有几种做法</p>
-<ol start="2">
-<li>如果这个数组是排好序的，那么中位数肯定是我们要找的那个数字。所以这道题实际上是要我们找中位数。我们可以使用partition方法来找出中位数。</li>
-<li>这个问题实际上是一个多数投票问题，可以利用 Boyer-Moore Majority Vote Algorithm 来解决这个问题，使得时间复杂度为 O(N)。使用一个times来统计一个数字出现的次数，如果该数字下一个数字不等于这个数字则times&ndash;，否则times++，如果times == 0，将统计的数字换成当前数字。因为有一个数字出现的次数超过数组长度的一半，所以最后剩下的times记录的肯定是这个数字。</li>
-<li>使用一个大小为k的最小堆来存储最大的k个数字，接下来每次从输入的n个数中读入一个数。如果最小堆中的数字少于k个，则直接把这次读入的数放入最小堆之中，如果最小堆中已有k个数字了，也就是最小堆已满，此时我们将这个要输入的数和最小堆根节点的数进行比较，如果这个数比根节点的值还要小则不需要加进来，如果这个数比根节点的值大则将其插入堆中，替换掉一个节点的值。时间复杂度为O(nlogn)</li>
+<ol>
+<li>
+<p>如果这个数组是排好序的，那么中位数肯定是我们要找的那个数字。所以这道题实际上是要我们找中位数。我们可以使用partition方法来找出中位数。</p>
+</li>
+<li>
+<p>这个问题实际上是一个多数投票问题，可以利用 Boyer-Moore Majority Vote Algorithm 来解决这个问题，使得时间复杂度为 O(N)。使用一个times来统计一个数字出现的次数，如果该数字下一个数字不等于这个数字则times&ndash;，否则times++，如果times == 0，将统计的数字换成当前数字。因为有一个数字出现的次数超过数组长度的一半，所以最后剩下的times记录的肯定是这个数字。</p>
+</li>
+<li>
+<p>使用一个大小为k的最小堆来存储最大的k个数字，接下来每次从输入的n个数中读入一个数。如果最小堆中的数字少于k个，则直接把这次读入的数放入最小堆之中，如果最小堆中已有k个数字了，也就是最小堆已满，此时我们将这个要输入的数和最小堆根节点的数进行比较，如果这个数比根节点的值还要小则不需要加进来，如果这个数比根节点的值大则将其插入堆中，替换掉一个节点的值。时间复杂度为O(nlogn)</p>
+</li>
 </ol>
 <p>对比：</p>
 <p>第二种方法会修改原来的数组，而且不是很适合处理海量数据。因为一旦数组大小n很大，内存可能放不下整个数组。这个时候就可以使用第三种方法，这种方法尽管速度比第二种慢，但是更适合处理海量数据，即n很大，k较小的情况，每次读取一个数字时，判断是不是需要将其放入最小堆中就行，所以内存能放下大小为k的最小堆即可。</p>
@@ -1188,6 +1194,155 @@ events[i].length == 2
         <span class="o">}</span>
         <span class="k">return</span> <span class="n">set</span><span class="o">.</span><span class="na">size</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
     <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<a class="post-dummy-target" id="10-"></a><h2>10. 二叉搜索树与双向链表</h2>
+<a class="post-dummy-target" id="heading19"></a><h3>问题描述</h3>
+<blockquote>
+<p>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的循环双向链表。要求不能创建任何新的节点，只能调整树中节点指针的指向。</p>
+<p>为了让您更好地理解问题，以下面的二叉搜索树为例：</p>
+<p><img src="https://assets.leetcode.com/uploads/2018/10/12/bstdlloriginalbst.png" alt="img"></p>
+<p>我们希望将这个二叉搜索树转化为双向循环链表。链表中的每个节点都有一个前驱和后继指针。对于双向循环链表，第一个节点的前驱是最后一个节点，最后一个节点的后继是第一个节点。</p>
+<p>下图展示了上面的二叉搜索树转化成的链表。“head” 表示指向链表中有最小元素的节点。</p>
+<p><img src="https://assets.leetcode.com/uploads/2018/10/12/bstdllreturndll.png" alt="img"></p>
+<p>特别地，我们希望可以就地完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中的第一个节点的指针。</p>
+<p>来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof</p>
+</blockquote>
+<a class="post-dummy-target" id="heading20"></a><h3>问题分析</h3>
+<p>关键字：二叉树，中序遍历，pre节点</p>
+<p>首先这是一个二叉搜索树，进行中序遍历就可以得到从小到大排序好的节点们。找到最小的那个节点，返回的双向列表的head即这个节点，并把end也初始化为最小的这个节点。之后每遍历到一个新的节点，连接该节点与之前的end节点，再把end赋值为新的节点，可以看成一个贪吃蛇，不停的在把尾巴延长。中序遍历完后，也就完成了整个需要返回的链表。</p>
+<a class="post-dummy-target" id="solution9"></a><h3>Solution</h3>
+<ol>
+<li>
+<p>递归版。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="n">Node</span> <span class="n">head</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">Node</span> <span class="n">end</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="n">Node</span> <span class="nf">treeToDoublyList</span><span class="o">(</span><span class="n">Node</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">root</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
+        <span class="n">process</span><span class="o">(</span><span class="n">root</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">end</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="n">head</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">end</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">;</span>
+    <span class="o">}</span>
+   
+    <span class="c1">//返回最后一个节点
+</span><span class="c1"></span>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">process</span><span class="o">(</span><span class="n">Node</span> <span class="n">root</span><span class="o">)</span><span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="o">;</span>
+        <span class="n">process</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">end</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">end</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+            <span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">end</span><span class="o">;</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">process</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>非递归版</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="n">Node</span> <span class="n">head</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">Node</span> <span class="n">end</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="n">Node</span> <span class="nf">treeToDoublyList</span><span class="o">(</span><span class="n">Node</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
+        <span class="n">Stack</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">Node</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">flag</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">cur</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span> <span class="o">|</span><span class="o">|</span> <span class="o">!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="o">)</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">cur</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span><span class="o">{</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">cur</span><span class="o">)</span><span class="o">;</span>
+                <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">left</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">flag</span> <span class="o">=</span><span class="o">=</span> <span class="n">0</span><span class="o">)</span><span class="o">{</span>
+                <span class="n">head</span> <span class="o">=</span> <span class="n">cur</span><span class="o">;</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="n">cur</span><span class="o">;</span>
+                <span class="n">flag</span> <span class="o">=</span> <span class="n">1</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">end</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">cur</span><span class="o">;</span>
+                <span class="n">cur</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">end</span><span class="o">;</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="n">cur</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">end</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="n">head</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">end</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
 </div></li>

@@ -18,27 +18,22 @@
       <pubDate>Tue, 03 Mar 2020 17:11:48 +0800</pubDate>
       
       <guid>/2020/03/hashcode_equals/</guid>
-      <description>1. Java 是值传递还是引用传递？
-Java只有值传递
-2. == 与 equals()的区别
-== ：它的作用是比较两个对象的地址是不是相同，判断两个对象是不是同一个对象(基本数据类型==比较的是值，引用数据类型比较的是内存地址)
+      <description>Java 是值传递还是引用传递? Java只有值传递
+== 与 equals()的区别 == ：它的作用是比较两个对象的地址是不是相同，判断两个对象是不是同一个对象(基本数据类型==比较的是值，引用数据类型比较的是内存地址)
 equals()：它的作用也是比较两个对象是否相等。但它一般有两种使用情况：
- 情况1：类没有覆盖equals()方法。则通过equals()比较两个对象时，等价于通过“==”比较这两个对象 情况2：类覆盖了equals()方法。一般，我们都覆盖equals()方法来判断两个对象的内容相等，若两个对象的内容相等，则返回true。  3. hashCode()是什么
-hashCode()的作用是获取哈希码，也称散列码，实际上是一个int整数。这个哈希码的作用是确定该对象在哈希表中的索引位置。
+  情况1：类没有覆盖equals()方法。则通过equals()比较两个对象时，等价于通过“==”比较这两个对象
+  情况2：类覆盖了equals()方法。一般，我们都覆盖equals()方法来判断两个对象的内容相等，若两个对象的内容相等，则返回true。
+  hashCode()是什么 hashCode()的作用是获取哈希码，也称散列码，实际上是一个int整数。这个哈希码的作用是确定该对象在哈希表中的索引位置。
 hashCode() 定义在JDK的Object.java中。这意味着Java中的任何类都会包含该方法。虽然所有类都有这个函数，但是hashCode()函数，仅仅当“创建某个类的散列表”时有意义。用来确定该类的每一个对象在散列表中对应的位置。其他情况下，类的hashCode()没有作用。
-4. hashCode()与 equals()的联系
-hashCode() 与equals()都是Object.java中就有的方法。要判断他们之间的联系要分我们使用的类的情况讨论。
-情况1. 不会创建&amp;quot;类对应的散列表&amp;rdquo;
-所谓不会&amp;quot;创建类对应的散列表&amp;rdquo;，指的是该类不会使用到HashMap，HashSet，HashTable等本质是散列表的数据结构中。
+hashCode()与 equals()的联系 hashCode() 与equals()都是Object.java中就有的方法。要判断他们之间的联系要分我们使用的类的情况讨论。
+ 不会创建&amp;quot;类对应的散列表&amp;rdquo;  所谓不会&amp;quot;创建类对应的散列表&amp;rdquo;，指的是该类不会使用到HashMap，HashSet，HashTable等本质是散列表的数据结构中。
 在这种情况下，hashCode() 与equals()之间没有关系！
 equals()用来比较两个类是否相等，而hashCode()没有作用。
-情况2. 会创建&amp;quot;类对应的散列表&amp;rdquo;
-这种情况与第一种情况相对应，指的是该类会使用到HashMap，HashSet，HashTable等本质是散列表的数据结构。
+会创建&amp;quot;类对应的散列表&amp;rdquo;  这种情况与第一种情况相对应，指的是该类会使用到HashMap，HashSet，HashTable等本质是散列表的数据结构。
 这种情况下，hashCode() 与equals()之间是有关系的，而且必须重写hashCode() 与equals()方法。
-1）如果两个对象相等，那么他们的hashCode()值一定是相等的。
-这里的相等是指，通过equals()比较两个对象时返回true。
-2）如果两个对象hashCode()值相等，他们不一定相等。
-因为在散列表中，hashCode()相等，即两个键值对的哈希值相等。然而哈希值相等，并不一定能得出键值对相等。补充说一句：“两个不同的键值对，哈希值相等”，这就是哈希冲突。
+  如果两个对象相等，那么他们的hashCode()值一定是相等的。( 这里的相等是指，通过equals()比较两个对象时返回true)
+  如果两个对象hashCode()值相等，他们不一定相等。
+  因为在散列表中，hashCode()相等，即两个键值对的哈希值相等。然而哈希值相等，并不一定能得出键值对相等。补充说一句：“两个不同的键值对，哈希值相等”，这就是哈希冲突。
 此外，在这种情况下。若要判断两个对象是否相等，除了要覆盖equals()之外，也要覆盖hashCode()函数。否则，equals()无效。</description>
     </item>
     

@@ -127,9 +127,11 @@
 
 这道题有几种做法
 
-2. 如果这个数组是排好序的，那么中位数肯定是我们要找的那个数字。所以这道题实际上是要我们找中位数。我们可以使用partition方法来找出中位数。
-3. 这个问题实际上是一个多数投票问题，可以利用 Boyer-Moore Majority Vote Algorithm 来解决这个问题，使得时间复杂度为 O(N)。使用一个times来统计一个数字出现的次数，如果该数字下一个数字不等于这个数字则times--，否则times++，如果times == 0，将统计的数字换成当前数字。因为有一个数字出现的次数超过数组长度的一半，所以最后剩下的times记录的肯定是这个数字。
-4. 使用一个大小为k的最小堆来存储最大的k个数字，接下来每次从输入的n个数中读入一个数。如果最小堆中的数字少于k个，则直接把这次读入的数放入最小堆之中，如果最小堆中已有k个数字了，也就是最小堆已满，此时我们将这个要输入的数和最小堆根节点的数进行比较，如果这个数比根节点的值还要小则不需要加进来，如果这个数比根节点的值大则将其插入堆中，替换掉一个节点的值。时间复杂度为O(nlogn)
+1. 如果这个数组是排好序的，那么中位数肯定是我们要找的那个数字。所以这道题实际上是要我们找中位数。我们可以使用partition方法来找出中位数。
+
+2. 这个问题实际上是一个多数投票问题，可以利用 Boyer-Moore Majority Vote Algorithm 来解决这个问题，使得时间复杂度为 O(N)。使用一个times来统计一个数字出现的次数，如果该数字下一个数字不等于这个数字则times--，否则times++，如果times == 0，将统计的数字换成当前数字。因为有一个数字出现的次数超过数组长度的一半，所以最后剩下的times记录的肯定是这个数字。
+
+3. 使用一个大小为k的最小堆来存储最大的k个数字，接下来每次从输入的n个数中读入一个数。如果最小堆中的数字少于k个，则直接把这次读入的数放入最小堆之中，如果最小堆中已有k个数字了，也就是最小堆已满，此时我们将这个要输入的数和最小堆根节点的数进行比较，如果这个数比根节点的值还要小则不需要加进来，如果这个数比根节点的值大则将其插入堆中，替换掉一个节点的值。时间复杂度为O(nlogn)
 
 对比：
 
@@ -794,6 +796,116 @@ x^(n) = x^((n - 1)/ 2) * x^((n - 1)/ 2) * x, n为奇数。
            }
            return set.size();
        }
+   ```
+
+   
+
+## 10. 二叉搜索树与双向链表
+
+### 问题描述
+
+> 输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的循环双向链表。要求不能创建任何新的节点，只能调整树中节点指针的指向。
+>
+>  
+>
+> 为了让您更好地理解问题，以下面的二叉搜索树为例：
+>
+>  ![img](https://assets.leetcode.com/uploads/2018/10/12/bstdlloriginalbst.png)
+>
+> 
+>
+>  
+>
+> 我们希望将这个二叉搜索树转化为双向循环链表。链表中的每个节点都有一个前驱和后继指针。对于双向循环链表，第一个节点的前驱是最后一个节点，最后一个节点的后继是第一个节点。
+>
+> 下图展示了上面的二叉搜索树转化成的链表。“head” 表示指向链表中有最小元素的节点。
+>
+>  
+>
+> ![img](https://assets.leetcode.com/uploads/2018/10/12/bstdllreturndll.png)
+>
+>  
+>
+> 特别地，我们希望可以就地完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中的第一个节点的指针。
+>
+> 来源：力扣（LeetCode）
+> 链接：https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof
+>
+
+### 问题分析
+
+关键字：二叉树，中序遍历，pre节点
+
+首先这是一个二叉搜索树，进行中序遍历就可以得到从小到大排序好的节点们。找到最小的那个节点，返回的双向列表的head即这个节点，并把end也初始化为最小的这个节点。之后每遍历到一个新的节点，连接该节点与之前的end节点，再把end赋值为新的节点，可以看成一个贪吃蛇，不停的在把尾巴延长。中序遍历完后，也就完成了整个需要返回的链表。	
+
+### Solution
+
+1. 递归版。
+
+   ```java
+   	class Solution {
+       Node head = null;
+       Node end = null;
+       public Node treeToDoublyList(Node root) {
+           if(root == null) return root;
+           process(root);
+           end.right = head;
+           head.left = end;
+           return head;
+       }
+   
+       //返回最后一个节点
+       public void process(Node root){
+           if (root == null) return ;
+           process(root.left);
+           if (end == null){
+               head = root;
+               end = root;
+           } else {
+               end.right = root;
+               root.left = end;
+               end = root;
+           }
+           process(root.right);
+       }
+   }
+   ```
+
+   
+
+2. 非递归版
+
+   ```java
+   class Solution {
+       Node head = null;
+       Node end = null;
+       public Node treeToDoublyList(Node root) {
+           if (root == null) return root;
+           Stack<Node> stack = new Stack<>();
+           Node cur = root;
+           int flag = 0;
+           while (cur != null || !stack.isEmpty()){
+               while (cur != null){
+                   stack.push(cur);
+                   cur = cur.left;
+               }
+               cur = stack.pop();
+               if (flag == 0){
+                   head = cur;
+                   end = cur;
+                   flag = 1;
+               } else {
+                   end.right = cur;
+                   cur.left = end;
+                   end = cur;
+               }
+               cur = cur.right;
+           }
+           end.right = head;
+           head.left = end;
+           return head;
+       }
+   }
    ```
 
    

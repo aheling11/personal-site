@@ -58,7 +58,7 @@ Solution   基于partition的方法
                 "url": "\/cover.png",
                 "width":  800 ,
                 "height":  600 
-            },"genre": "posts","keywords": "算法, 数据结构","wordcount":  2170 ,
+            },"genre": "posts","keywords": "算法, 数据结构","wordcount":  2381 ,
         "url": "\/2020\/02\/fre-ques\/","datePublished": "2020-02-15T22:09:16\x2b08:00","dateModified": "2020-02-15T22:09:16\x2b08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
                 "@type": "Organization",
                 "name": "xxxx",
@@ -104,8 +104,8 @@ Solution   基于partition的方法
                     <i class="fas fa-user-circle fa-fw"></i>HeLing
                 </a>&nbsp;<span class="post-category">收录于&nbsp;<i class="far fa-folder fa-fw"></i><a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a>&nbsp;</span></div>
             <div class="meta-line"><i class="far fa-calendar-alt fa-fw"></i><time datetime=2020-02-15>2020-02-15</time>&nbsp;
-                <i class="fas fa-pencil-alt fa-fw"></i>约 2170 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>预计阅读 11 分钟&nbsp;</div>
+                <i class="fas fa-pencil-alt fa-fw"></i>约 2381 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>预计阅读 12 分钟&nbsp;</div>
         </div><div class="content"><p>[TOC]</p>
 <h1 id="heading">常见题</h1>
 <a class="post-dummy-target" id="1-k"></a><h2>1. 寻找第K大的值</h2>
@@ -291,11 +291,9 @@ Solution   基于partition的方法
 <p>这个问题实际上是一个多数投票问题，可以利用 Boyer-Moore Majority Vote Algorithm 来解决这个问题，使得时间复杂度为 O(N)。使用一个times来统计一个数字出现的次数，如果该数字下一个数字不等于这个数字则times&ndash;，否则times++，如果times == 0，将统计的数字换成当前数字。因为有一个数字出现的次数超过数组长度的一半，所以最后剩下的times记录的肯定是这个数字。</p>
 </li>
 <li>
-<p>使用一个大小为k的最小堆来存储最大的k个数字，接下来每次从输入的n个数中读入一个数。如果最小堆中的数字少于k个，则直接把这次读入的数放入最小堆之中，如果最小堆中已有k个数字了，也就是最小堆已满，此时我们将这个要输入的数和最小堆根节点的数进行比较，如果这个数比根节点的值还要小则不需要加进来，如果这个数比根节点的值大则将其插入堆中，替换掉一个节点的值。时间复杂度为O(nlogn)</p>
+<p>基于快速排序的思想，如果partition中随机的那个数的下标是n/2，那么这个数就是这个数组的中位数，</p>
 </li>
 </ol>
-<p>对比：</p>
-<p>第二种方法会修改原来的数组，而且不是很适合处理海量数据。因为一旦数组大小n很大，内存可能放不下整个数组。这个时候就可以使用第三种方法，这种方法尽管速度比第二种慢，但是更适合处理海量数据，即n很大，k较小的情况，每次读取一个数字时，判断是不是需要将其放入最小堆中就行，所以内存能放下大小为k的最小堆即可。</p>
 <a class="post-dummy-target" id="solution1"></a><h3>Solution</h3>
 <ol>
 <li>
@@ -1343,6 +1341,127 @@ events[i].length == 2
         <span class="k">return</span> <span class="n">head</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<a class="post-dummy-target" id="11-"></a><h2>11. 把数组排成最小的数</h2>
+<a class="post-dummy-target" id="heading21"></a><h3>问题描述</h3>
+<blockquote>
+<p>输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。</p>
+<p>示例 1:</p>
+<p>输入: [10,2]
+输出: &ldquo;102&rdquo;
+示例 2:</p>
+<p>输入: [3,30,34,5,9]
+输出: &ldquo;3033459&rdquo;</p>
+<p>提示:</p>
+<p>0 &lt; nums.length &lt;= 100
+说明:</p>
+<p>输出结果可能非常大，所以你需要返回一个字符串而不是整数
+拼接起来的数字可能会有前导 0，最后结果不需要去掉前导 0</p>
+<p>来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof</p>
+</blockquote>
+<a class="post-dummy-target" id="heading22"></a><h3>问题分析</h3>
+<p>关键字：排序，Comparator，Java 函数式编程，大数问题</p>
+<p>实际上是要我们定制一套比较规则，然后对所有数字进行排序。比如说有数字n和数字m，比较拼接后的数字nm和数字mn的大小，如果nm &lt; mn，则我们定义n小于m；反之，如果mn &gt; nm，则m小于n；nm = mn，则n等于m。定制好规则并排序后，将所有数字拼接起来则得到结果。</p>
+<p>需要注意的是，拼接两个数字nm时，如果直接用int比较有数值溢出的可能，所以我们可以使用字符串来进行比较。</p>
+<a class="post-dummy-target" id="solution10"></a><h3>Solution</h3>
+<ol>
+<li>
+<p>我的解法：新建了一个Number类，实现了Comparable接口。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Number</span> <span class="kd">implements</span> <span class="n">Comparable</span><span class="o">&lt;</span><span class="n">Number</span><span class="o">&gt;</span><span class="o">{</span>
+        <span class="kt">int</span> <span class="n">data</span><span class="o">;</span>
+        <span class="kd">public</span> <span class="nf">Number</span><span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">)</span><span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">data</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compareTo</span><span class="o">(</span><span class="n">Number</span> <span class="n">mnumber</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">data</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">mnumber</span><span class="o">.</span><span class="na">data</span><span class="o">;</span>
+            <span class="n">String</span> <span class="n">nm</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="o">+</span> <span class="n">m</span><span class="o">;</span>
+            <span class="n">String</span> <span class="n">mn</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">m</span><span class="o">)</span> <span class="o">+</span> <span class="n">n</span><span class="o">;</span>
+            <span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">mn</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+   
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">minNumber</span><span class="o">(</span><span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Number</span><span class="o">[</span><span class="o">]</span> <span class="n">Numbers</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Number</span><span class="o">[</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">]</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Numbers</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Number</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">Numbers</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">Numbers</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">Numbers</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="o">.</span><span class="na">data</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>更简洁的写法，使用了函数式编程来实现Comparator接口</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">minNumber_2</span><span class="o">(</span><span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span><span class="o">{</span>
+            <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">num</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">list</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="o">(</span><span class="n">s1</span> <span class="o">,</span> <span class="n">s2</span><span class="o">)</span> <span class="o">-</span><span class="o">&gt;</span> <span class="o">(</span><span class="n">s1</span> <span class="o">+</span> <span class="n">s2</span><span class="o">)</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">s2</span> <span class="o">+</span> <span class="n">s1</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">str</span> <span class="o">:</span> <span class="n">list</span><span class="o">)</span><span class="o">{</span>
+            <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
 </div></li>

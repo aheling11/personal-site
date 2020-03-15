@@ -131,11 +131,9 @@
 
 2. 这个问题实际上是一个多数投票问题，可以利用 Boyer-Moore Majority Vote Algorithm 来解决这个问题，使得时间复杂度为 O(N)。使用一个times来统计一个数字出现的次数，如果该数字下一个数字不等于这个数字则times--，否则times++，如果times == 0，将统计的数字换成当前数字。因为有一个数字出现的次数超过数组长度的一半，所以最后剩下的times记录的肯定是这个数字。
 
-3. 使用一个大小为k的最小堆来存储最大的k个数字，接下来每次从输入的n个数中读入一个数。如果最小堆中的数字少于k个，则直接把这次读入的数放入最小堆之中，如果最小堆中已有k个数字了，也就是最小堆已满，此时我们将这个要输入的数和最小堆根节点的数进行比较，如果这个数比根节点的值还要小则不需要加进来，如果这个数比根节点的值大则将其插入堆中，替换掉一个节点的值。时间复杂度为O(nlogn)
+3. 基于快速排序的思想，如果partition中随机的那个数的下标是n/2，那么这个数就是这个数组的中位数，
 
-对比：
 
-第二种方法会修改原来的数组，而且不是很适合处理海量数据。因为一旦数组大小n很大，内存可能放不下整个数组。这个时候就可以使用第三种方法，这种方法尽管速度比第二种慢，但是更适合处理海量数据，即n很大，k较小的情况，每次读取一个数字时，判断是不是需要将其放入最小堆中就行，所以内存能放下大小为k的最小堆即可。
 
 ### Solution
 
@@ -911,3 +909,96 @@ x^(n) = x^((n - 1)/ 2) * x^((n - 1)/ 2) * x, n为奇数。
    
 
 
+
+## 11. 把数组排成最小的数
+
+### 问题描述
+
+> 输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
+>
+>  
+>
+> 示例 1:
+>
+> 输入: [10,2]
+> 输出: "102"
+> 示例 2:
+>
+> 输入: [3,30,34,5,9]
+> 输出: "3033459"
+>
+>
+> 提示:
+>
+> 0 < nums.length <= 100
+> 说明:
+>
+> 输出结果可能非常大，所以你需要返回一个字符串而不是整数
+> 拼接起来的数字可能会有前导 0，最后结果不需要去掉前导 0
+>
+> 来源：力扣（LeetCode）
+> 链接：https://leetcode-cn.com/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof
+>
+
+### 问题分析
+
+关键字：排序，Comparator，Java 函数式编程，大数问题
+
+实际上是要我们定制一套比较规则，然后对所有数字进行排序。比如说有数字n和数字m，比较拼接后的数字nm和数字mn的大小，如果nm < mn，则我们定义n小于m；反之，如果mn > nm，则m小于n；nm = mn，则n等于m。定制好规则并排序后，将所有数字拼接起来则得到结果。
+
+需要注意的是，拼接两个数字nm时，如果直接用int比较有数值溢出的可能，所以我们可以使用字符串来进行比较。
+
+### Solution
+
+1. 我的解法：新建了一个Number类，实现了Comparable接口。
+
+   ```java
+   	static class Number implements Comparable<Number>{
+           int data;
+           public Number(int num){
+               this.data = num;
+           }
+           @Override
+           public int compareTo(Number mnumber) {
+               int n = data;
+               int m = mnumber.data;
+               String nm = String.valueOf(n) + m;
+               String mn = String.valueOf(m) + n;
+               return nm.compareTo(mn);
+           }
+       }
+   
+       public static String minNumber(int[] nums) {
+           Number[] Numbers = new Number[nums.length];
+           for (int i = 0; i < nums.length; i++) {
+               Numbers[i] = new Number(nums[i]);
+           }
+           Arrays.sort(Numbers);
+           StringBuilder sb = new StringBuilder();
+           for (int i = 0; i < Numbers.length; i++) {
+               sb.append(Numbers[i].data);
+           }
+           return sb.toString();
+       }
+   ```
+
+   
+
+2. 更简洁的写法，使用了函数式编程来实现Comparator接口
+
+   ```java
+   public static String minNumber_2(int[] nums) {
+           List<String> list = new ArrayList<>();
+           for(int num : nums){
+               list.add(String.valueOf(num));
+           }
+           list.sort((s1 , s2) -> (s1 + s2).compareTo(s2 + s1));
+           StringBuilder sb = new StringBuilder();
+           for(String str : list){
+               sb.append(str);
+           }
+           return sb.toString();
+       }
+   ```
+
+   

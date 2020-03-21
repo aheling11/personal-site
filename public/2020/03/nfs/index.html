@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>NFs | Jeffrey&#39;s Blog</title>
+        <meta name="Description" content="About LoveIt Theme"><meta property="og:title" content="NFs" />
+<meta property="og:description" content="第一范式（1NF） 强调的是列的原子性，即列不能再分为其他列
+考虑这样一张表【联系人】（电话，地址，姓名）。
+其中电话可以分为家庭电话和公司电话，所以这张表没有达到1NF。
+要符合1NF，只需要改成【联系人】（家庭电话，公司电话，地址，姓名）就行了
+在实际工作中，当我们拿出一个表设计的时候，可以看成已经符合 1NF 了。为什么说&quot;可以看成&quot;呢？举个例子，假设我们的关系中有个属性 address，是由 province city street 组成的。如果我们是物流行业，以后会按省份或城市进行分析，在这样的场景下 address 就是可分的，那这样的设计就不符合 1NF。如果我们业务中地址只是用作一下展示，那么 address 作为一个整体就不必细分了。重点不在于域本身，而在于业务场景中要如何使用域。
+第二范式（2NF） 首先要满足1NF，然后在此基础上满足两个条件
+  有主键
+  没有包含在主键中的列都必须完全依赖于主键，而不能只依赖主键的一部分，即不能有部分依赖
+  考虑一个订单明细表：【OrderDetail】（OrderID，ProductID，UnitPrice，Discount，Quantity，ProductName）
+其中，（OrderID，ProductID）是主键，而UnitPrice，ProductName是依赖于ProductID的，和OrderID没关系，这样就产生了部分依赖，不满足2NF。
+可以把【OrderDetail】表拆分为【OrderDetail】（OrderID，ProductID，Discount，Quantity）和【Product】（ProductID，UnitPrice，ProductName）来消除原订单表中UnitPrice，ProductName多次重复的情况。
+第三范式（3NF） 在1NF基础上，任何非主属性不依赖于其它非主属性[在2NF基础上消除传递依赖]。
+第三范式（3NF）是第二范式（2NF）的一个子集，即满足第三范式（3NF）必须满足第二范式（2NF）。
+例如，非主键列A依赖于非主键列B，而非主键列B依赖于主键，这就属于传递依赖。
+考虑一个订单表【Order】（OrderID，OrderDate，CustomerID，CustomerName，CustomerAddr，CustomerCity）主键是（OrderID）。
+其中 OrderDate，CustomerID，CustomerName，CustomerAddr，CustomerCity 等非主键列都完全依赖于主键（OrderID），所以符合 2NF。
+但其中CustomerName，CustomerAddr，CustomerCity都依赖于非主键列CustomerID，而CustomerID依赖于OrderID。CustomerName，CustomerAddr，CustomerCity是通过传递才依赖于主键，所以不符合 3NF。
+通过拆分【Order】为【Order】（OrderID，OrderDate，CustomerID）和【Customer】（CustomerID，CustomerName，CustomerAddr，CustomerCity）从而达到 3NF。
+总结 范式只是一个工具。它的提出是为了帮助我们减少数据库的冗余性，在设计阶段为我们提供思考上的便利。前面的介绍中也可以看出，并不是一定要苛求&quot;精确地&quot;符合范式，我们最终的目的，还是要根据业务场景设计出合适的结构。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2020/03/nfs/" />
+<meta property="article:published_time" content="2020-03-21T13:06:08+08:00" />
+<meta property="article:modified_time" content="2020-03-21T13:06:08+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="NFs"/>
+<meta name="twitter:description" content="第一范式（1NF） 强调的是列的原子性，即列不能再分为其他列
+考虑这样一张表【联系人】（电话，地址，姓名）。
+其中电话可以分为家庭电话和公司电话，所以这张表没有达到1NF。
+要符合1NF，只需要改成【联系人】（家庭电话，公司电话，地址，姓名）就行了
+在实际工作中，当我们拿出一个表设计的时候，可以看成已经符合 1NF 了。为什么说&quot;可以看成&quot;呢？举个例子，假设我们的关系中有个属性 address，是由 province city street 组成的。如果我们是物流行业，以后会按省份或城市进行分析，在这样的场景下 address 就是可分的，那这样的设计就不符合 1NF。如果我们业务中地址只是用作一下展示，那么 address 作为一个整体就不必细分了。重点不在于域本身，而在于业务场景中要如何使用域。
+第二范式（2NF） 首先要满足1NF，然后在此基础上满足两个条件
+  有主键
+  没有包含在主键中的列都必须完全依赖于主键，而不能只依赖主键的一部分，即不能有部分依赖
+  考虑一个订单明细表：【OrderDetail】（OrderID，ProductID，UnitPrice，Discount，Quantity，ProductName）
+其中，（OrderID，ProductID）是主键，而UnitPrice，ProductName是依赖于ProductID的，和OrderID没关系，这样就产生了部分依赖，不满足2NF。
+可以把【OrderDetail】表拆分为【OrderDetail】（OrderID，ProductID，Discount，Quantity）和【Product】（ProductID，UnitPrice，ProductName）来消除原订单表中UnitPrice，ProductName多次重复的情况。
+第三范式（3NF） 在1NF基础上，任何非主属性不依赖于其它非主属性[在2NF基础上消除传递依赖]。
+第三范式（3NF）是第二范式（2NF）的一个子集，即满足第三范式（3NF）必须满足第二范式（2NF）。
+例如，非主键列A依赖于非主键列B，而非主键列B依赖于主键，这就属于传递依赖。
+考虑一个订单表【Order】（OrderID，OrderDate，CustomerID，CustomerName，CustomerAddr，CustomerCity）主键是（OrderID）。
+其中 OrderDate，CustomerID，CustomerName，CustomerAddr，CustomerCity 等非主键列都完全依赖于主键（OrderID），所以符合 2NF。
+但其中CustomerName，CustomerAddr，CustomerCity都依赖于非主键列CustomerID，而CustomerID依赖于OrderID。CustomerName，CustomerAddr，CustomerCity是通过传递才依赖于主键，所以不符合 3NF。
+通过拆分【Order】为【Order】（OrderID，OrderDate，CustomerID）和【Customer】（CustomerID，CustomerName，CustomerAddr，CustomerCity）从而达到 3NF。
+总结 范式只是一个工具。它的提出是为了帮助我们减少数据库的冗余性，在设计阶段为我们提供思考上的便利。前面的介绍中也可以看出，并不是一定要苛求&quot;精确地&quot;符合范式，我们最终的目的，还是要根据业务场景设计出合适的结构。"/>
+<meta name="theme-color" content="#ffffff">
+<meta name="msapplication-TileColor" content="#da532c">
+<link rel="canonical" href="/2020/03/nfs/" />
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="prev" href="/2020/03/hashcode_equals/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/css/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/css/lib/forkawesome/fork-awesome.min.css"><link rel="stylesheet" href="/css/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "NFs",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/2020\/03\/nfs\/"
+        },"image": {
+                "@type": "ImageObject",
+                "url": "\/cover.png",
+                "width":  800 ,
+                "height":  600 
+            },"genre": "posts","wordcount":  40 ,
+        "url": "\/2020\/03\/nfs\/","datePublished": "2020-03-21T13:06:08\x2b08:00","dateModified": "2020-03-21T13:06:08\x2b08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+                "@type": "Organization",
+                "name": "xxxx",
+                "logo": {
+                "@type": "ImageObject",
+                "url": "\/logo.png",
+                "width":  127 ,
+                "height":  40 
+                }
+            },"description": ""
+    }
+    </script></head>
+    <body><script>
+            if (!window.localStorage || !window.localStorage.getItem('theme')) {window.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;} else {
+                window.isDark = (window.localStorage && window.localStorage.getItem('theme')) === 'dark';
+            }
+            window.isDark && document.body.classList.add('dark-theme');
+        </script><div class="wrapper"><header class="desktop">
+    <div class="header-wrapper">
+        <div class="header-title animated bounceIn">
+            <a href="/">Jeffrey&#39;s Blog</a>
+        </div>
+        <div class="menu"><a class="menu-item" href="/posts" title="">文章</a><a class="menu-item" href="/tags" title="">标签</a><a class="menu-item" href="/categories" title="">分类</a><a class="menu-item" href="/about" title="">关于</a><a href="javascript:void(0);" class="theme-switch"><i class="fas fa-adjust fa-rotate-180 fa-fw" title="切换主题"></i></a>
+        </div>
+    </div>
+</header><header class="mobile">
+    <div class="header-wrapper">
+        <div class="header-container">
+            <div class="header-title animated bounceIn">
+                <a href="/">Jeffrey&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts" title="">文章</a><a class="menu-item" href="/tags" title="">标签</a><a class="menu-item" href="/categories" title="">分类</a><a class="menu-item" href="/about" title="">关于</a><a href="javascript:void(0);" class="theme-switch"><i class="fas fa-adjust fa-rotate-180 fa-fw" title="切换主题"></i></a>
+        </div>
+    </div>
+</header>
+<main class="main">
+                <div class="container"><article class="page single"><h1 class="single-title animated flipInX">NFs</h1><div class="meta">
+            <div class="meta-line"><a class="author" href="/" rel="author" target="_blank">
+                    <i class="fas fa-user-circle fa-fw"></i>HE LING
+                </a>&nbsp;</div>
+            <div class="meta-line"><i class="far fa-calendar-alt fa-fw"></i><time datetime=2020-03-21>2020-03-21</time>&nbsp;
+                <i class="fas fa-pencil-alt fa-fw"></i>约 40 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>预计阅读 1 分钟&nbsp;</div>
+        </div><div class="content"><a class="post-dummy-target" id="1nf"></a><h2>第一范式（1NF）</h2>
+<p>强调的是列的原子性，即列不能再分为其他列</p>
+<p>考虑这样一张表【联系人】（电话，地址，姓名）。</p>
+<p>其中电话可以分为家庭电话和公司电话，所以这张表没有达到1NF。</p>
+<p>要符合1NF，只需要改成【联系人】（家庭电话，公司电话，地址，姓名）就行了</p>
+<p>在实际工作中，当我们拿出一个表设计的时候，可以看成已经符合 1NF 了。为什么说&quot;可以看成&quot;呢？举个例子，假设我们的关系中有个属性 address，是由 province city street 组成的。如果我们是物流行业，以后会按省份或城市进行分析，在这样的场景下 address 就是可分的，那这样的设计就不符合 1NF。如果我们业务中地址只是用作一下展示，那么 address 作为一个整体就不必细分了。重点不在于域本身，而在于业务场景中要如何使用域。</p>
+<a class="post-dummy-target" id="2nf"></a><h2>第二范式（2NF）</h2>
+<p>首先要满足1NF，然后在此基础上满足两个条件</p>
+<ol>
+<li>
+<p>有主键</p>
+</li>
+<li>
+<p>没有包含在主键中的列都必须完全依赖于主键，而不能只依赖主键的一部分，即不能有部分依赖</p>
+</li>
+</ol>
+<p>考虑一个订单明细表：【OrderDetail】（OrderID，ProductID，UnitPrice，Discount，Quantity，ProductName）</p>
+<p>其中，（OrderID，ProductID）是主键，而UnitPrice，ProductName是依赖于ProductID的，和OrderID没关系，这样就产生了部分依赖，不满足2NF。</p>
+<p>可以把【OrderDetail】表拆分为【OrderDetail】（OrderID，ProductID，Discount，Quantity）和【Product】（ProductID，UnitPrice，ProductName）来消除原订单表中UnitPrice，ProductName多次重复的情况。</p>
+<a class="post-dummy-target" id="3nf"></a><h2>第三范式（3NF）</h2>
+<p>在1NF基础上，任何非主属性不依赖于其它非主属性[在2NF基础上消除传递依赖]。</p>
+<p>第三范式（3NF）是第二范式（2NF）的一个子集，即满足第三范式（3NF）必须满足第二范式（2NF）。</p>
+<p>例如，非主键列A依赖于非主键列B，而非主键列B依赖于主键，这就属于传递依赖。</p>
+<p>考虑一个订单表【Order】（OrderID，OrderDate，CustomerID，CustomerName，CustomerAddr，CustomerCity）主键是（OrderID）。</p>
+<p>其中 OrderDate，CustomerID，CustomerName，CustomerAddr，CustomerCity 等非主键列都完全依赖于主键（OrderID），所以符合 2NF。</p>
+<p>但其中CustomerName，CustomerAddr，CustomerCity都依赖于非主键列CustomerID，而CustomerID依赖于OrderID。CustomerName，CustomerAddr，CustomerCity是通过传递才依赖于主键，所以不符合 3NF。</p>
+<p>通过拆分【Order】为【Order】（OrderID，OrderDate，CustomerID）和【Customer】（CustomerID，CustomerName，CustomerAddr，CustomerCity）从而达到 3NF。</p>
+<a class="post-dummy-target" id="heading"></a><h2>总结</h2>
+<p>范式只是一个工具。它的提出是为了帮助我们减少数据库的冗余性，在设计阶段为我们提供思考上的便利。前面的介绍中也可以看出，并不是一定要苛求&quot;精确地&quot;符合范式，我们最终的目的，还是要根据业务场景设计出合适的结构。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>本文于 2020-03-21 更新</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share"><span><a href="//twitter.com/share?url=%2f2020%2f03%2fnfs%2f&amp;text=NFs&amp;via=" target="_blank" title="分享到 Twitter">
+            <i class="fab fa-twitter fa-fw"></i>
+        </a><a href="//www.facebook.com/sharer/sharer.php?u=%2f2020%2f03%2fnfs%2f" target="_blank" title="分享到 Facebook">
+            <i class="fab fa-facebook-square fa-fw"></i>
+        </a><a href="//reddit.com/submit?url=%2f2020%2f03%2fnfs%2f&amp;title=NFs" target="_blank" title="分享到 Reddit">
+            <i class="fab fa-reddit fa-fw"></i>
+        </a><a href="//service.weibo.com/share/share.php?url=%2f2020%2f03%2fnfs%2f&amp;appkey=&amp;title=NFs" target="_blank" title="分享到 Weibo">
+            <i class="fab fa-weibo fa-fw"></i>
+        </a></span></div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section></section>
+        <section>
+            <span><a href="javascript:window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/03/hashcode_equals/" class="prev" rel="prev" title="Java中equals()和&#39;==&#39;和hashCode()的联系"><i class="fas fa-angle-left fa-fw"></i>Java中equals()和&#39;==&#39;和hashCode()的联系</a></div>
+</div>
+<div class="comment"></div>
+    </article></div>
+            </main><footer class="footer">
+    <div class="copyright"><div class="copyright-line">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="external nofollow noopener noreffer">LoveIt<i class="far fa-heart fa-fw"></i></a>
+        </div>
+
+        <div class="copyright-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+    </div>
+</footer>
+</div><a href="#" class="dynamic-to-top" id="dynamic-to-top" data-scroll>
+            <span>&nbsp;</span>
+        </a><script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "\\(", right: "\\)", display: false },
+                    { left: "\\[", right: "\\]", display: true },{ left: "$", right: "$", display: false },]
+            });
+        });
+    </script><link rel="stylesheet" href="/css/lib/katex/katex.min.css"><link rel="stylesheet" href="/css/lib/katex/copy-tex.min.css"><script src="/js/lib/jquery/jquery.slim.min.js"></script><script src="/js/lib/lazysizes/lazysizes.min.js"></script><script src="/js/lib/smooth-scroll/smooth-scroll.polyfills.min.js"></script><script src="/js/lib/katex/katex.min.js"></script><script src="/js/lib/katex/auto-render.min.js"></script><script src="/js/lib/katex/copy-tex.min.js"></script><script src="/js/lib/katex/mhchem.min.js"></script><script src="/js/theme.min.js"></script></body>
+</html>

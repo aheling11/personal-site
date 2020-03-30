@@ -14,7 +14,7 @@ MVCC是什么？ MVCC全称是Multi-Version Concurrency Control，多版本并�
 MVCC是怎样工作的？ 不同存储引擎的MVCC实现是不同的，典型的有乐观（optimistic）并发控制和悲观（pessimistic）并发控制。
 下面通过innoDB的简化版行为来说明MVCC是如何工作的。
 InnoDB的MVCC是通过在每行记录后面保存两个隐藏的列来实现。这两个列，一个保存了行的创建时间，一个保存了行的过期时间（删除时间）。并且存储的并不是真实的时间值，而是系统版本号（system version number）。每开始一个新的事务，系统版本号都会自动递增。事务开始时刻的系统版本号会作为事务的版本号，用来和查询到的每行记录的版本号进行比较。
-下面看一下在REPEATEABLE READ级别下，MVCC是如何具体操作的:
+MVCC操作流程 下面看一下在REPEATEABLE READ级别下，MVCC是如何具体操作的:
 SELECT
 InnoDB会根据以下两个条件检查没行记录： 1. InnoDB只会查找版本早于当前事务版本的数据行（也就是，行的系统版本小于或等于事务的系统版本号）， 这样可以确保事务读取到的行，要么是事务开始前已经存在的，要么是事务自身插入或者修改过的。 2. 行的删除版本要么未定义，要么大于当前事务的版本号。这样可以确保事务读取到的行，在事务之前未被 删除。 只有符合上述两个条件的记录，才能被作为返回查询结果
 INSERT
@@ -23,8 +23,10 @@ DELETE
 InnoDB为删除的每一行保存当前系统版本号作为删除标识
 UPDATE
 UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为删除标识。
-只看文字可能不太好理解，下面用实例来说明一下，下面是一张学生信息表user_info
-   student_ID name age created_time delete_time     1 Alice 18 12 14   2 Bob 20 11    3 David 19 16    4 Jeff 22 14 16    假如我们现在开启一个新事务，当前事务版本为15。" />
+MVCC操作举例 只看文字可能不太好理解，下面我们用实例来说明一下。
+首先要说明的是在MySQL中建表时，每个表都会有三列隐藏记录，其中和MVCC有关系的有两列
+ 数据行的版本号 （DB_TRX_ID） 删除版本号 (DB_ROLL_PT)     student_ID name age DB_TRX_ID DB_ROLL_PT             以下是一张学生信息表user_info，表中已经有4行数据，假如我们现在开启一个新事务，当前事务版本为15。
+   student_ID name age DB_TRX_ID DB_ROLL_PT     1 Alice 18 12 14   2 Bob 20 11    3 David 19 16    4 Jeff 22 14 16    我们先说明update操作的逻辑流程，看完update的其实就很好理解这个机制怎么回事了，执行以下语句" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2020/03/mvcc/" />
 <meta property="article:published_time" content="2020-03-30T16:19:40+08:00" />
@@ -38,7 +40,7 @@ MVCC是什么？ MVCC全称是Multi-Version Concurrency Control，多版本并�
 MVCC是怎样工作的？ 不同存储引擎的MVCC实现是不同的，典型的有乐观（optimistic）并发控制和悲观（pessimistic）并发控制。
 下面通过innoDB的简化版行为来说明MVCC是如何工作的。
 InnoDB的MVCC是通过在每行记录后面保存两个隐藏的列来实现。这两个列，一个保存了行的创建时间，一个保存了行的过期时间（删除时间）。并且存储的并不是真实的时间值，而是系统版本号（system version number）。每开始一个新的事务，系统版本号都会自动递增。事务开始时刻的系统版本号会作为事务的版本号，用来和查询到的每行记录的版本号进行比较。
-下面看一下在REPEATEABLE READ级别下，MVCC是如何具体操作的:
+MVCC操作流程 下面看一下在REPEATEABLE READ级别下，MVCC是如何具体操作的:
 SELECT
 InnoDB会根据以下两个条件检查没行记录： 1. InnoDB只会查找版本早于当前事务版本的数据行（也就是，行的系统版本小于或等于事务的系统版本号）， 这样可以确保事务读取到的行，要么是事务开始前已经存在的，要么是事务自身插入或者修改过的。 2. 行的删除版本要么未定义，要么大于当前事务的版本号。这样可以确保事务读取到的行，在事务之前未被 删除。 只有符合上述两个条件的记录，才能被作为返回查询结果
 INSERT
@@ -47,8 +49,10 @@ DELETE
 InnoDB为删除的每一行保存当前系统版本号作为删除标识
 UPDATE
 UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为删除标识。
-只看文字可能不太好理解，下面用实例来说明一下，下面是一张学生信息表user_info
-   student_ID name age created_time delete_time     1 Alice 18 12 14   2 Bob 20 11    3 David 19 16    4 Jeff 22 14 16    假如我们现在开启一个新事务，当前事务版本为15。"/>
+MVCC操作举例 只看文字可能不太好理解，下面我们用实例来说明一下。
+首先要说明的是在MySQL中建表时，每个表都会有三列隐藏记录，其中和MVCC有关系的有两列
+ 数据行的版本号 （DB_TRX_ID） 删除版本号 (DB_ROLL_PT)     student_ID name age DB_TRX_ID DB_ROLL_PT             以下是一张学生信息表user_info，表中已经有4行数据，假如我们现在开启一个新事务，当前事务版本为15。
+   student_ID name age DB_TRX_ID DB_ROLL_PT     1 Alice 18 12 14   2 Bob 20 11    3 David 19 16    4 Jeff 22 14 16    我们先说明update操作的逻辑流程，看完update的其实就很好理解这个机制怎么回事了，执行以下语句"/>
 <meta name="theme-color" content="#ffffff">
 <meta name="msapplication-TileColor" content="#da532c">
 <link rel="canonical" href="/2020/03/mvcc/" />
@@ -70,7 +74,7 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
                 "url": "\/cover.png",
                 "width":  800 ,
                 "height":  600 
-            },"genre": "posts","keywords": "MySQL, 数据库","wordcount":  198 ,
+            },"genre": "posts","keywords": "MySQL, 数据库","wordcount":  213 ,
         "url": "\/2020\/03\/mvcc\/","datePublished": "2020-03-30T16:19:40\x2b08:00","dateModified": "2020-03-30T16:19:40\x2b08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
                 "@type": "Organization",
                 "name": "xxxx",
@@ -116,7 +120,7 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
                     <i class="fas fa-user-circle fa-fw"></i>HeLing
                 </a>&nbsp;</div>
             <div class="meta-line"><i class="far fa-calendar-alt fa-fw"></i><time datetime=2020-03-30>2020-03-30</time>&nbsp;
-                <i class="fas fa-pencil-alt fa-fw"></i>约 198 字&nbsp;
+                <i class="fas fa-pencil-alt fa-fw"></i>约 213 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>预计阅读 1 分钟&nbsp;</div>
         </div><div class="content"><a class="post-dummy-target" id="heading"></a><h2>开始</h2>
 <p>最近在读《高性能MySQL》这本书，总结一下MVCC的内容。</p>
@@ -129,6 +133,7 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 <p>不同存储引擎的MVCC实现是不同的，典型的有乐观（optimistic）并发控制和悲观（pessimistic）并发控制。</p>
 <p>下面通过innoDB的简化版行为来说明MVCC是如何工作的。</p>
 <p>InnoDB的MVCC是通过在每行记录后面保存两个隐藏的列来实现。这两个列，一个保存了行的创建时间，一个保存了行的过期时间（删除时间）。并且存储的并不是真实的时间值，而是系统版本号（system version number）。每开始一个新的事务，系统版本号都会自动递增。事务开始时刻的系统版本号会作为事务的版本号，用来和查询到的每行记录的版本号进行比较。</p>
+<a class="post-dummy-target" id="mvcc3"></a><h3>MVCC操作流程</h3>
 <p>下面看一下在REPEATEABLE READ级别下，MVCC是如何具体操作的:</p>
 <p><strong>SELECT</strong></p>
 <p>InnoDB会根据以下两个条件检查没行记录：
@@ -143,15 +148,42 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 <p>InnoDB为删除的每一行保存当前系统版本号作为删除标识</p>
 <p><strong>UPDATE</strong></p>
 <p>UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为删除标识。</p>
-<p>只看文字可能不太好理解，下面用实例来说明一下，下面是一张学生信息表user_info</p>
+<a class="post-dummy-target" id="mvcc4"></a><h3>MVCC操作举例</h3>
+<p>只看文字可能不太好理解，下面我们用实例来说明一下。</p>
+<p>首先要说明的是在MySQL中建表时，每个表都会有三列隐藏记录，其中和MVCC有关系的有两列</p>
+<ul>
+<li>数据行的版本号 （DB_TRX_ID）</li>
+<li>删除版本号 (DB_ROLL_PT)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>student_ID</th>
+<th align="center">name</th>
+<th align="center">age</th>
+<th align="center">DB_TRX_ID</th>
+<th>DB_ROLL_PT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>以下是一张学生信息表user_info，表中已经有4行数据，假如我们现在开启一个新事务，当前事务版本为15。</p>
 <table>
 <thead>
 <tr>
 <th>student_ID</th>
 <th>name</th>
 <th>age</th>
-<th>created_time</th>
-<th>delete_time</th>
+<th>DB_TRX_ID</th>
+<th>DB_ROLL_PT</th>
 </tr>
 </thead>
 <tbody>
@@ -185,8 +217,7 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 </tr>
 </tbody>
 </table>
-<p>假如我们现在开启一个新事务，当前事务版本为15。</p>
-<p>其实我们只要看update是怎么操作的就很好理解了</p>
+<p>我们先说明update操作的逻辑流程，看完update的其实就很好理解这个机制怎么回事了，执行以下语句</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -195,15 +226,15 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">UPDATE</span> <span class="n">user_info</span> <span class="k">SET</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s1">Tom</span><span class="s1">&#39;</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s1">Bob</span><span class="s1">&#39;</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>那么整个表会插入一条新记录，并保存当前版本号15，同时UPDATE的那行记录会保存当前版本号15作为删除标识。</p>
+</div><p>语句执行完后，整个表会插入一条新记录，该新记录会保存当前版本号15，同时UPDATE的那行记录会保存当前版本号15作为删除标识。</p>
 <table>
 <thead>
 <tr>
 <th>student_ID</th>
 <th>name</th>
 <th>age</th>
-<th>created_time</th>
-<th>delete_time</th>
+<th>DB_TRX_ID</th>
+<th>DB_ROLL_PT</th>
 </tr>
 </thead>
 <tbody>
@@ -244,7 +275,8 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 </tr>
 </tbody>
 </table>
-<p>我的理解DELETE操作也是不会真正删除数据的，删除的那行记录还是会暂时保存快照在数据库中，如下</p>
+<p>DELETE操作也是不会真正删除数据的，删除的那行记录还是会暂时保存快照在数据库中。</p>
+<p>执行如下SQL语句：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -253,14 +285,15 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">user_info</span> <span class="k">WHERE</span> <span class="n">student_ID</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 </code></pre></td></tr></table>
 </div>
-</div><table>
+</div><p>执行完后，得到表如下</p>
+<table>
 <thead>
 <tr>
 <th>student_ID</th>
 <th>name</th>
 <th>age</th>
-<th>created_time</th>
-<th>delete_time</th>
+<th>DB_TRX_ID</th>
+<th>DB_ROLL_PT</th>
 </tr>
 </thead>
 <tbody>
@@ -294,6 +327,7 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 </tr>
 </tbody>
 </table>
+<p>可以看到第二行数据并没有真正被删除，而只是新添加了删除标识。</p>
 <p>下面举个INSERT的例子，执行如下语句</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -303,15 +337,15 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">user_info</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;</span><span class="s1">John</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="s1">23</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">;</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>那么就会添加一条新记录如下</p>
+</div><p>执行完后，表添加一条新记录如下</p>
 <table>
 <thead>
 <tr>
 <th>student_ID</th>
 <th>name</th>
 <th>age</th>
-<th>created_time</th>
-<th>delete_time</th>
+<th>DB_TRX_ID</th>
+<th>DB_ROLL_PT</th>
 </tr>
 </thead>
 <tbody>
@@ -368,8 +402,8 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 <th>student_ID</th>
 <th>name</th>
 <th>age</th>
-<th>created_time</th>
-<th>delete_time</th>
+<th>DB_TRX_ID</th>
+<th>DB_ROLL_PT</th>
 </tr>
 </thead>
 <tbody>
@@ -396,8 +430,8 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 </tr>
 </tbody>
 </table>
-<p>保存着两个额外的系统版本号，使大多数读操作都可以不用加锁。这样设计使得读操作简单，性能强，并且保证只会读取到符合标准的行。不足之处是没行记录都需要额外的存储空间，需要做更多的检查工作，以及一些额外的维护工作。</p>
 <a class="post-dummy-target" id="heading1"></a><h2>需要注意的是</h2>
+<p>保存着两个额外的系统版本号，使大多数读操作都可以不用加锁。这样设计使得读操作简单，性能强，并且保证只会读取到符合标准的行。不足之处是没行记录都需要额外的存储空间，需要做更多的检查工作，以及一些额外的维护工作。</p>
 <p>MVCC只在REPEATABLE READ和READ COMMITTED两个隔离级别下工作。其他两个隔离级别都和MVCC不兼容，因为READ UNCOMMITTED总是读取最新的数据行，而不是符合当前事务版本的数据行，而SERIALIZABLE会对所有读取到的行都加锁。</p>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">

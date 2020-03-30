@@ -1,4 +1,4 @@
-# Mvcc
+# MySQL | 浅谈Mvcc机制
 
 
 
@@ -104,7 +104,7 @@ DELETE FROM user_info WHERE student_ID = 2;
 INSERT INTO user_info(name, age) VALUES('John','23');
 ```
 
-那么就会新添加一条记录如下
+那么就会添加一条新记录如下
 
 | student_ID | name  | age  | created_time | delete_time |
 | ---------- | ----- | ---- | ------------ | ----------- |

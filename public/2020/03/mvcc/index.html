@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>Mvcc | Jeffrey&#39;s Blog</title>
-        <meta name="Description" content="About LoveIt Theme"><meta property="og:title" content="Mvcc" />
+        <title>MySQL | 浅谈Mvcc机制 | Jeffrey&#39;s Blog</title>
+        <meta name="Description" content="About LoveIt Theme"><meta property="og:title" content="MySQL | 浅谈Mvcc机制" />
 <meta property="og:description" content="开始 最近在读《高性能MySQL》这本书，总结一下MVCC的内容。
 个人观点，如有错误欢迎交流~
 MVCC是什么？ MVCC全称是Multi-Version Concurrency Control，多版本并发控制。基于提升并发性能的考虑，很多数据库包括MySQL，Oracle也都实现了MVCC。
@@ -30,7 +30,7 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 <meta property="article:published_time" content="2020-03-30T16:19:40+08:00" />
 <meta property="article:modified_time" content="2020-03-30T16:19:40+08:00" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Mvcc"/>
+<meta name="twitter:title" content="MySQL | 浅谈Mvcc机制"/>
 <meta name="twitter:description" content="开始 最近在读《高性能MySQL》这本书，总结一下MVCC的内容。
 个人观点，如有错误欢迎交流~
 MVCC是什么？ MVCC全称是Multi-Version Concurrency Control，多版本并发控制。基于提升并发性能的考虑，很多数据库包括MySQL，Oracle也都实现了MVCC。
@@ -61,7 +61,7 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "Mvcc",
+        "headline": "MySQL | 浅谈Mvcc机制",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "\/2020\/03\/mvcc\/"
@@ -111,7 +111,7 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
     </div>
 </header>
 <main class="main">
-                <div class="container"><article class="page single"><h1 class="single-title animated flipInX">Mvcc</h1><div class="meta">
+                <div class="container"><article class="page single"><h1 class="single-title animated flipInX">MySQL | 浅谈Mvcc机制</h1><div class="meta">
             <div class="meta-line"><a class="author" href="/" rel="author" target="_blank">
                     <i class="fas fa-user-circle fa-fw"></i>HeLing
                 </a>&nbsp;</div>
@@ -303,7 +303,7 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">user_info</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;</span><span class="s1">John</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="s1">23</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">;</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>那么就会新添加一条记录如下</p>
+</div><p>那么就会添加一条新记录如下</p>
 <table>
 <thead>
 <tr>
@@ -409,13 +409,13 @@ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号�
         </div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
-            <div class="post-info-share"><span><a href="//twitter.com/share?url=%2f2020%2f03%2fmvcc%2f&amp;text=Mvcc&amp;via=" target="_blank" title="分享到 Twitter">
+            <div class="post-info-share"><span><a href="//twitter.com/share?url=%2f2020%2f03%2fmvcc%2f&amp;text=MySQL%20%7c%20%e6%b5%85%e8%b0%88Mvcc%e6%9c%ba%e5%88%b6&amp;via=" target="_blank" title="分享到 Twitter">
             <i class="fab fa-twitter fa-fw"></i>
         </a><a href="//www.facebook.com/sharer/sharer.php?u=%2f2020%2f03%2fmvcc%2f" target="_blank" title="分享到 Facebook">
             <i class="fab fa-facebook-square fa-fw"></i>
-        </a><a href="//reddit.com/submit?url=%2f2020%2f03%2fmvcc%2f&amp;title=Mvcc" target="_blank" title="分享到 Reddit">
+        </a><a href="//reddit.com/submit?url=%2f2020%2f03%2fmvcc%2f&amp;title=MySQL%20%7c%20%e6%b5%85%e8%b0%88Mvcc%e6%9c%ba%e5%88%b6" target="_blank" title="分享到 Reddit">
             <i class="fab fa-reddit fa-fw"></i>
-        </a><a href="//service.weibo.com/share/share.php?url=%2f2020%2f03%2fmvcc%2f&amp;appkey=&amp;title=Mvcc" target="_blank" title="分享到 Weibo">
+        </a><a href="//service.weibo.com/share/share.php?url=%2f2020%2f03%2fmvcc%2f&amp;appkey=&amp;title=MySQL%20%7c%20%e6%b5%85%e8%b0%88Mvcc%e6%9c%ba%e5%88%b6" target="_blank" title="分享到 Weibo">
             <i class="fab fa-weibo fa-fw"></i>
         </a></span></div>
         </div>

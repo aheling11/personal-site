@@ -1,5 +1,5 @@
 ---
-title: "Mvcc"
+title: "MySQL | 浅谈Mvcc机制"
 date: 2020-03-30T16:19:40+08:00
 draft: false
 Author: HeLing
@@ -112,7 +112,7 @@ DELETE FROM user_info WHERE student_ID = 2;
 INSERT INTO user_info(name, age) VALUES('John','23');
 ```
 
-那么就会新添加一条记录如下
+那么就会添加一条新记录如下
 
 | student_ID | name  | age  | created_time | delete_time |
 | ---------- | ----- | ---- | ------------ | ----------- |

@@ -11,7 +11,7 @@
 <meta property="og:description" content="About LoveIt Theme" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/" />
-<meta property="og:updated_time" content="2020-03-21T13:06:08+08:00" />
+<meta property="og:updated_time" content="2020-03-30T16:19:40+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Jeffrey&#39;s Blog"/>
 <meta name="twitter:description" content="About LoveIt Theme"/>
@@ -75,9 +75,37 @@
     </a></div>
 </div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/2020/03/nfs/">NFs</a>
+        <a href="/2020/03/mvcc/">Mvcc</a>
     </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
-            <i class="fas fa-user-circle fa-fw"></i>HE LING
+            <i class="fas fa-user-circle fa-fw"></i>HeLing
+        </a>发布于  <time datetime=2020-03-30>2020-03-30</time>&nbsp;</div><div class="content">开始 最近在读《高性能MySQL》这本书，总结一下MVCC的内容。
+个人观点，如有错误欢迎交流~
+MVCC是什么？ MVCC全称是Multi-Version Concurrency Control，多版本并发控制。基于提升并发性能的考虑，很多数据库包括MySQL，Oracle也都实现了MVCC。
+使用MVCC的好处？ MVCC的最大好处：读不加任何锁，读写不冲突，对于读操作多于写操作的应用，极大的增加了系统的并发性能。
+MVCC是怎样工作的？ 不同存储引擎的MVCC实现是不同的，典型的有乐观（optimistic）并发控制和悲观（pessimistic）并发控制。
+下面通过innoDB的简化版行为来说明MVCC是如何工作的。
+InnoDB的MVCC是通过在每行记录后面保存两个隐藏的列来实现。这两个列，一个保存了行的创建时间，一个保存了行的过期时间（删除时间）。并且存储的并不是真实的时间值，而是系统版本号（system version number）。每开始一个新的事务，系统版本号都会自动递增。事务开始时刻的系统版本号会作为事务的版本号，用来和查询到的每行记录的版本号进行比较。
+下面看一下在REPEATEABLE READ级别下，MVCC是如何具体操作的**：**
+SELECT
+ InnoDB会根据以下两个条件检查没行记录： a. InnoDB只会查找版本早于当前事务版本的数据行（也就是，行的系统版本小于或等于事务的系统版本号）， 这样可以确保事务读取到的行，要么是事务开始前已经存在的，要么是事务自身插入或者修改过的。 b. 行的删除版本要么未定义，要么大于当前事务的版本号。这样可以确保事务读取到的行，在事务之前未被 删除。 只有符合上述两个条件的记录，才能被作为返回查询结果
+ INSERT
+ InnoDB为新插入的一行保存当前系统版本号作为行版本号
+ DELETE
+ InnoDB为删除的每一行保存当前系统版本号作为删除标识
+ UPDATE
+ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为删除标识。
+ 只看文字可能不太好理解，下面用实例来说明一下，下面是一张学生信息表user_info
+   student_ID name age created_time delete_time     1 Alice 18 12 14   2 Bob 20 11    3 David 19 16    4 Jeff 22 14 16    假如我们现在开启一个新事务，当前事务版本为15。</div><div class="post-footer">
+        <a href="/2020/03/mvcc/">阅读全文</a><div class="post-tags"><span class="tag">
+                        &nbsp;<a href="/tags/mysql/"><i class="fas fa-tag fa-fw"></i>&nbsp;MySQL</a>
+                    </span><span class="tag">
+                        &nbsp;<a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fas fa-tag fa-fw"></i>&nbsp;数据库</a>
+                    </span></div></div>
+</article>
+<article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
+        <a href="/2020/03/nfs/">数据库三范式</a>
+    </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
+            <i class="fas fa-user-circle fa-fw"></i>He Ling
         </a>发布于  <time datetime=2020-03-21>2020-03-21</time>&nbsp;</div><div class="content">第一范式（1NF） 强调的是列的原子性，即列不能再分为其他列
 考虑这样一张表【联系人】（电话，地址，姓名）。
 其中电话可以分为家庭电话和公司电话，所以这张表没有达到1NF。
@@ -97,7 +125,9 @@
 但其中CustomerName，CustomerAddr，CustomerCity都依赖于非主键列CustomerID，而CustomerID依赖于OrderID。CustomerName，CustomerAddr，CustomerCity是通过传递才依赖于主键，所以不符合 3NF。
 通过拆分【Order】为【Order】（OrderID，OrderDate，CustomerID）和【Customer】（CustomerID，CustomerName，CustomerAddr，CustomerCity）从而达到 3NF。
 总结 范式只是一个工具。它的提出是为了帮助我们减少数据库的冗余性，在设计阶段为我们提供思考上的便利。前面的介绍中也可以看出，并不是一定要苛求&quot;精确地&quot;符合范式，我们最终的目的，还是要根据业务场景设计出合适的结构。</div><div class="post-footer">
-        <a href="/2020/03/nfs/">阅读全文</a></div>
+        <a href="/2020/03/nfs/">阅读全文</a><div class="post-tags"><span class="tag">
+                        &nbsp;<a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fas fa-tag fa-fw"></i>&nbsp;数据库</a>
+                    </span></div></div>
 </article>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/2020/03/hashcode_equals/">Java中equals()和&#39;==&#39;和hashCode()的联系</a>
@@ -173,25 +203,15 @@ Solution   基于partition的方法
                         &nbsp;<a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><i class="fas fa-tag fa-fw"></i>&nbsp;数据结构</a>
                     </span></div></div>
 </article>
-<article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/2020/02/single-linked-questions/">链表题汇总</a>
-    </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
-            <i class="fas fa-user-circle fa-fw"></i>HeLing
-        </a>发布于  <time datetime=2020-02-15>2020-02-15</time>&nbsp;<span class="post-category">收录于&nbsp;<i class="far fa-folder fa-fw"></i>
-                        <a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a></span></div><div class="content">链表题汇总 [TOC]
-1.反转链表 问题描述  LeetCode: 输入一个链表，反转链表后，输出链表的所有元素。
-示例:
-输入: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL
-输出: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL
- 问题分析 这道算法题，说直白点就是：如何让后一个节点指向前一个节点。下面的代码中定义了一个next节点用来保存反转后的头节点。
-Solution 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25  /** * Definition for singly-linked list. * public class ListNode { * int val; * ListNode next; * ListNode(int x) { val = x; } * } */ class Solution { public ListNode reverseList(ListNode head) { ListNode next = null; ListNode pre = null; while(head !</div><div class="post-footer">
-        <a href="/2020/02/single-linked-questions/">阅读全文</a><div class="post-tags"><span class="tag">
-                        &nbsp;<a href="/tags/%E9%93%BE%E8%A1%A8/"><i class="fas fa-tag fa-fw"></i>&nbsp;链表</a>
-                    </span><span class="tag">
-                        &nbsp;<a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><i class="fas fa-tag fa-fw"></i>&nbsp;数据结构</a>
-                    </span></div></div>
-</article>
-</div></div>
+<ul class="pagination"><li class="page-item active">
+                    <span class="page-link">
+                        <a href="/">1</a>
+                    </span>
+                </li><li class="page-item ">
+                    <span class="page-link">
+                        <a href="/page/2/">2</a>
+                    </span>
+                </li></ul></div></div>
             </main><footer class="footer">
     <div class="copyright"><div class="copyright-line">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="external nofollow noopener noreffer">LoveIt<i class="far fa-heart fa-fw"></i></a>
         </div>

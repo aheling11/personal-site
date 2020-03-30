@@ -1,8 +1,11 @@
 ---
-title: "NFs"
+title: "数据库三范式"
 date: 2020-03-21T13:06:08+08:00
-Author: "HE LING"
+Author: "He Ling"
 draft: false
+tags: [
+  "数据库",
+]
 ---
 
 ## 第一范式（1NF）

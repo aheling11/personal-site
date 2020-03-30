@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>NFs | Jeffrey&#39;s Blog</title>
-        <meta name="Description" content="About LoveIt Theme"><meta property="og:title" content="NFs" />
+        <title>数据库三范式 | Jeffrey&#39;s Blog</title>
+        <meta name="Description" content="About LoveIt Theme"><meta property="og:title" content="数据库三范式" />
 <meta property="og:description" content="第一范式（1NF） 强调的是列的原子性，即列不能再分为其他列
 考虑这样一张表【联系人】（电话，地址，姓名）。
 其中电话可以分为家庭电话和公司电话，所以这张表没有达到1NF。
@@ -31,7 +31,7 @@
 <meta property="article:published_time" content="2020-03-21T13:06:08+08:00" />
 <meta property="article:modified_time" content="2020-03-21T13:06:08+08:00" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="NFs"/>
+<meta name="twitter:title" content="数据库三范式"/>
 <meta name="twitter:description" content="第一范式（1NF） 强调的是列的原子性，即列不能再分为其他列
 考虑这样一张表【联系人】（电话，地址，姓名）。
 其中电话可以分为家庭电话和公司电话，所以这张表没有达到1NF。
@@ -59,11 +59,11 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="prev" href="/2020/03/hashcode_equals/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/css/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/css/lib/forkawesome/fork-awesome.min.css"><link rel="stylesheet" href="/css/lib/animate/animate.min.css"><script type="application/ld+json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="prev" href="/2020/03/hashcode_equals/" /><link rel="next" href="/2020/03/mvcc/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/css/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/css/lib/forkawesome/fork-awesome.min.css"><link rel="stylesheet" href="/css/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "NFs",
+        "headline": "数据库三范式",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "\/2020\/03\/nfs\/"
@@ -72,7 +72,7 @@
                 "url": "\/cover.png",
                 "width":  800 ,
                 "height":  600 
-            },"genre": "posts","wordcount":  40 ,
+            },"genre": "posts","keywords": "数据库","wordcount":  40 ,
         "url": "\/2020\/03\/nfs\/","datePublished": "2020-03-21T13:06:08\x2b08:00","dateModified": "2020-03-21T13:06:08\x2b08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
                 "@type": "Organization",
                 "name": "xxxx",
@@ -113,9 +113,9 @@
     </div>
 </header>
 <main class="main">
-                <div class="container"><article class="page single"><h1 class="single-title animated flipInX">NFs</h1><div class="meta">
+                <div class="container"><article class="page single"><h1 class="single-title animated flipInX">数据库三范式</h1><div class="meta">
             <div class="meta-line"><a class="author" href="/" rel="author" target="_blank">
-                    <i class="fas fa-user-circle fa-fw"></i>HE LING
+                    <i class="fas fa-user-circle fa-fw"></i>He Ling
                 </a>&nbsp;</div>
             <div class="meta-line"><i class="far fa-calendar-alt fa-fw"></i><time datetime=2020-03-21>2020-03-21</time>&nbsp;
                 <i class="fas fa-pencil-alt fa-fw"></i>约 40 字&nbsp;
@@ -159,26 +159,29 @@
         </div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
-            <div class="post-info-share"><span><a href="//twitter.com/share?url=%2f2020%2f03%2fnfs%2f&amp;text=NFs&amp;via=" target="_blank" title="分享到 Twitter">
+            <div class="post-info-share"><span><a href="//twitter.com/share?url=%2f2020%2f03%2fnfs%2f&amp;text=%e6%95%b0%e6%8d%ae%e5%ba%93%e4%b8%89%e8%8c%83%e5%bc%8f&amp;via=" target="_blank" title="分享到 Twitter">
             <i class="fab fa-twitter fa-fw"></i>
         </a><a href="//www.facebook.com/sharer/sharer.php?u=%2f2020%2f03%2fnfs%2f" target="_blank" title="分享到 Facebook">
             <i class="fab fa-facebook-square fa-fw"></i>
-        </a><a href="//reddit.com/submit?url=%2f2020%2f03%2fnfs%2f&amp;title=NFs" target="_blank" title="分享到 Reddit">
+        </a><a href="//reddit.com/submit?url=%2f2020%2f03%2fnfs%2f&amp;title=%e6%95%b0%e6%8d%ae%e5%ba%93%e4%b8%89%e8%8c%83%e5%bc%8f" target="_blank" title="分享到 Reddit">
             <i class="fab fa-reddit fa-fw"></i>
-        </a><a href="//service.weibo.com/share/share.php?url=%2f2020%2f03%2fnfs%2f&amp;appkey=&amp;title=NFs" target="_blank" title="分享到 Weibo">
+        </a><a href="//service.weibo.com/share/share.php?url=%2f2020%2f03%2fnfs%2f&amp;appkey=&amp;title=%e6%95%b0%e6%8d%ae%e5%ba%93%e4%b8%89%e8%8c%83%e5%bc%8f" target="_blank" title="分享到 Weibo">
             <i class="fab fa-weibo fa-fw"></i>
         </a></span></div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section></section>
+        <section><span class="tag">
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fas fa-tag fa-fw"></i>&nbsp;数据库</a>&nbsp;
+                    </span></section>
         <section>
             <span><a href="javascript:window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/2020/03/hashcode_equals/" class="prev" rel="prev" title="Java中equals()和&#39;==&#39;和hashCode()的联系"><i class="fas fa-angle-left fa-fw"></i>Java中equals()和&#39;==&#39;和hashCode()的联系</a></div>
+    <div class="post-nav"><a href="/2020/03/hashcode_equals/" class="prev" rel="prev" title="Java中equals()和&#39;==&#39;和hashCode()的联系"><i class="fas fa-angle-left fa-fw"></i>Java中equals()和&#39;==&#39;和hashCode()的联系</a>
+            <a href="/2020/03/mvcc/" class="next" rel="next" title="Mvcc">Mvcc<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 <div class="comment"></div>
     </article></div>

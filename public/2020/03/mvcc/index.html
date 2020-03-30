@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Mvcc | Jeffrey&#39;s Blog</title>
+        <meta name="Description" content="About LoveIt Theme"><meta property="og:title" content="Mvcc" />
+<meta property="og:description" content="开始 最近在读《高性能MySQL》这本书，总结一下MVCC的内容。
+个人观点，如有错误欢迎交流~
+MVCC是什么？ MVCC全称是Multi-Version Concurrency Control，多版本并发控制。基于提升并发性能的考虑，很多数据库包括MySQL，Oracle也都实现了MVCC。
+使用MVCC的好处？ MVCC的最大好处：读不加任何锁，读写不冲突，对于读操作多于写操作的应用，极大的增加了系统的并发性能。
+MVCC是怎样工作的？ 不同存储引擎的MVCC实现是不同的，典型的有乐观（optimistic）并发控制和悲观（pessimistic）并发控制。
+下面通过innoDB的简化版行为来说明MVCC是如何工作的。
+InnoDB的MVCC是通过在每行记录后面保存两个隐藏的列来实现。这两个列，一个保存了行的创建时间，一个保存了行的过期时间（删除时间）。并且存储的并不是真实的时间值，而是系统版本号（system version number）。每开始一个新的事务，系统版本号都会自动递增。事务开始时刻的系统版本号会作为事务的版本号，用来和查询到的每行记录的版本号进行比较。
+下面看一下在REPEATEABLE READ级别下，MVCC是如何具体操作的**：**
+SELECT
+ InnoDB会根据以下两个条件检查没行记录： a. InnoDB只会查找版本早于当前事务版本的数据行（也就是，行的系统版本小于或等于事务的系统版本号）， 这样可以确保事务读取到的行，要么是事务开始前已经存在的，要么是事务自身插入或者修改过的。 b. 行的删除版本要么未定义，要么大于当前事务的版本号。这样可以确保事务读取到的行，在事务之前未被 删除。 只有符合上述两个条件的记录，才能被作为返回查询结果
+ INSERT
+ InnoDB为新插入的一行保存当前系统版本号作为行版本号
+ DELETE
+ InnoDB为删除的每一行保存当前系统版本号作为删除标识
+ UPDATE
+ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为删除标识。
+ 只看文字可能不太好理解，下面用实例来说明一下，下面是一张学生信息表user_info
+   student_ID name age created_time delete_time     1 Alice 18 12 14   2 Bob 20 11    3 David 19 16    4 Jeff 22 14 16    假如我们现在开启一个新事务，当前事务版本为15。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2020/03/mvcc/" />
+<meta property="article:published_time" content="2020-03-30T16:19:40+08:00" />
+<meta property="article:modified_time" content="2020-03-30T16:19:40+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Mvcc"/>
+<meta name="twitter:description" content="开始 最近在读《高性能MySQL》这本书，总结一下MVCC的内容。
+个人观点，如有错误欢迎交流~
+MVCC是什么？ MVCC全称是Multi-Version Concurrency Control，多版本并发控制。基于提升并发性能的考虑，很多数据库包括MySQL，Oracle也都实现了MVCC。
+使用MVCC的好处？ MVCC的最大好处：读不加任何锁，读写不冲突，对于读操作多于写操作的应用，极大的增加了系统的并发性能。
+MVCC是怎样工作的？ 不同存储引擎的MVCC实现是不同的，典型的有乐观（optimistic）并发控制和悲观（pessimistic）并发控制。
+下面通过innoDB的简化版行为来说明MVCC是如何工作的。
+InnoDB的MVCC是通过在每行记录后面保存两个隐藏的列来实现。这两个列，一个保存了行的创建时间，一个保存了行的过期时间（删除时间）。并且存储的并不是真实的时间值，而是系统版本号（system version number）。每开始一个新的事务，系统版本号都会自动递增。事务开始时刻的系统版本号会作为事务的版本号，用来和查询到的每行记录的版本号进行比较。
+下面看一下在REPEATEABLE READ级别下，MVCC是如何具体操作的**：**
+SELECT
+ InnoDB会根据以下两个条件检查没行记录： a. InnoDB只会查找版本早于当前事务版本的数据行（也就是，行的系统版本小于或等于事务的系统版本号）， 这样可以确保事务读取到的行，要么是事务开始前已经存在的，要么是事务自身插入或者修改过的。 b. 行的删除版本要么未定义，要么大于当前事务的版本号。这样可以确保事务读取到的行，在事务之前未被 删除。 只有符合上述两个条件的记录，才能被作为返回查询结果
+ INSERT
+ InnoDB为新插入的一行保存当前系统版本号作为行版本号
+ DELETE
+ InnoDB为删除的每一行保存当前系统版本号作为删除标识
+ UPDATE
+ UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为删除标识。
+ 只看文字可能不太好理解，下面用实例来说明一下，下面是一张学生信息表user_info
+   student_ID name age created_time delete_time     1 Alice 18 12 14   2 Bob 20 11    3 David 19 16    4 Jeff 22 14 16    假如我们现在开启一个新事务，当前事务版本为15。"/>
+<meta name="theme-color" content="#ffffff">
+<meta name="msapplication-TileColor" content="#da532c">
+<link rel="canonical" href="/2020/03/mvcc/" />
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="prev" href="/2020/03/nfs/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/css/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/css/lib/forkawesome/fork-awesome.min.css"><link rel="stylesheet" href="/css/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Mvcc",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/2020\/03\/mvcc\/"
+        },"image": {
+                "@type": "ImageObject",
+                "url": "\/cover.png",
+                "width":  800 ,
+                "height":  600 
+            },"genre": "posts","keywords": "MySQL, 数据库","wordcount":  198 ,
+        "url": "\/2020\/03\/mvcc\/","datePublished": "2020-03-30T16:19:40\x2b08:00","dateModified": "2020-03-30T16:19:40\x2b08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+                "@type": "Organization",
+                "name": "xxxx",
+                "logo": {
+                "@type": "ImageObject",
+                "url": "\/logo.png",
+                "width":  127 ,
+                "height":  40 
+                }
+            },"description": ""
+    }
+    </script></head>
+    <body><script>
+            if (!window.localStorage || !window.localStorage.getItem('theme')) {window.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;} else {
+                window.isDark = (window.localStorage && window.localStorage.getItem('theme')) === 'dark';
+            }
+            window.isDark && document.body.classList.add('dark-theme');
+        </script><div class="wrapper"><header class="desktop">
+    <div class="header-wrapper">
+        <div class="header-title animated bounceIn">
+            <a href="/">Jeffrey&#39;s Blog</a>
+        </div>
+        <div class="menu"><a class="menu-item" href="/posts" title="">文章</a><a class="menu-item" href="/tags" title="">标签</a><a class="menu-item" href="/categories" title="">分类</a><a class="menu-item" href="/about" title="">关于</a><a href="javascript:void(0);" class="theme-switch"><i class="fas fa-adjust fa-rotate-180 fa-fw" title="切换主题"></i></a>
+        </div>
+    </div>
+</header><header class="mobile">
+    <div class="header-wrapper">
+        <div class="header-container">
+            <div class="header-title animated bounceIn">
+                <a href="/">Jeffrey&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts" title="">文章</a><a class="menu-item" href="/tags" title="">标签</a><a class="menu-item" href="/categories" title="">分类</a><a class="menu-item" href="/about" title="">关于</a><a href="javascript:void(0);" class="theme-switch"><i class="fas fa-adjust fa-rotate-180 fa-fw" title="切换主题"></i></a>
+        </div>
+    </div>
+</header>
+<main class="main">
+                <div class="container"><article class="page single"><h1 class="single-title animated flipInX">Mvcc</h1><div class="meta">
+            <div class="meta-line"><a class="author" href="/" rel="author" target="_blank">
+                    <i class="fas fa-user-circle fa-fw"></i>HeLing
+                </a>&nbsp;</div>
+            <div class="meta-line"><i class="far fa-calendar-alt fa-fw"></i><time datetime=2020-03-30>2020-03-30</time>&nbsp;
+                <i class="fas fa-pencil-alt fa-fw"></i>约 198 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>预计阅读 1 分钟&nbsp;</div>
+        </div><div class="content"><a class="post-dummy-target" id="heading"></a><h2>开始</h2>
+<p>最近在读《高性能MySQL》这本书，总结一下MVCC的内容。</p>
+<p>个人观点，如有错误欢迎交流~</p>
+<a class="post-dummy-target" id="mvcc"></a><h2>MVCC是什么？</h2>
+<p>MVCC全称是Multi-Version Concurrency Control，多版本并发控制。基于提升并发性能的考虑，很多数据库包括MySQL，Oracle也都实现了MVCC。</p>
+<a class="post-dummy-target" id="mvcc1"></a><h2>使用MVCC的好处？</h2>
+<p>MVCC的最大好处：读不加任何锁，读写不冲突，对于读操作多于写操作的应用，极大的增加了系统的并发性能。</p>
+<a class="post-dummy-target" id="mvcc2"></a><h2>MVCC是怎样工作的？</h2>
+<p>不同存储引擎的MVCC实现是不同的，典型的有乐观（optimistic）并发控制和悲观（pessimistic）并发控制。</p>
+<p>下面通过innoDB的简化版行为来说明MVCC是如何工作的。</p>
+<p>InnoDB的MVCC是通过在每行记录后面保存两个隐藏的列来实现。这两个列，一个保存了行的创建时间，一个保存了行的过期时间（删除时间）。并且存储的并不是真实的时间值，而是系统版本号（system version number）。每开始一个新的事务，系统版本号都会自动递增。事务开始时刻的系统版本号会作为事务的版本号，用来和查询到的每行记录的版本号进行比较。</p>
+<p>下面看一下在REPEATEABLE READ级别下，MVCC是如何具体操作的**：**</p>
+<p>SELECT</p>
+<blockquote>
+<p>InnoDB会根据以下两个条件检查没行记录：
+a. InnoDB只会查找版本早于当前事务版本的数据行（也就是，行的系统版本小于或等于事务的系统版本号），
+这样可以确保事务读取到的行，要么是事务开始前已经存在的，要么是事务自身插入或者修改过的。
+b. 行的删除版本要么未定义，要么大于当前事务的版本号。这样可以确保事务读取到的行，在事务之前未被
+删除。
+只有符合上述两个条件的记录，才能被作为返回查询结果</p>
+</blockquote>
+<p>INSERT</p>
+<blockquote>
+<p>InnoDB为新插入的一行保存当前系统版本号作为行版本号</p>
+</blockquote>
+<p>DELETE</p>
+<blockquote>
+<p>InnoDB为删除的每一行保存当前系统版本号作为删除标识</p>
+</blockquote>
+<p>UPDATE</p>
+<blockquote>
+<p>UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为删除标识。</p>
+</blockquote>
+<p>只看文字可能不太好理解，下面用实例来说明一下，下面是一张学生信息表user_info</p>
+<table>
+<thead>
+<tr>
+<th>student_ID</th>
+<th>name</th>
+<th>age</th>
+<th>created_time</th>
+<th>delete_time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Alice</td>
+<td>18</td>
+<td>12</td>
+<td>14</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bob</td>
+<td>20</td>
+<td>11</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>David</td>
+<td>19</td>
+<td>16</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Jeff</td>
+<td>22</td>
+<td>14</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<p>假如我们现在开启一个新事务，当前事务版本为15。</p>
+<p>其实我们只要看update是怎么操作的就很好理解了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">UPDATE</span> <span class="n">user_info</span> <span class="k">SET</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s1">Tom</span><span class="s1">&#39;</span> <span class="k">WHERE</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s1">Bob</span><span class="s1">&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>那么整个表会插入一条新记录，并保存当前版本号15，同时UPDATE的那行记录会保存当前版本号15作为删除标识。</p>
+<table>
+<thead>
+<tr>
+<th>student_ID</th>
+<th>name</th>
+<th>age</th>
+<th>created_time</th>
+<th>delete_time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Alice</td>
+<td>18</td>
+<td>12</td>
+<td>14</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bob</td>
+<td>20</td>
+<td>11</td>
+<td>15</td>
+</tr>
+<tr>
+<td>3</td>
+<td>David</td>
+<td>19</td>
+<td>16</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Jeff</td>
+<td>22</td>
+<td>14</td>
+<td>16</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Tom</td>
+<td>20</td>
+<td>15</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>我的理解DELETE操作也是不会真正删除数据的，删除的那行记录还是会暂时保存快照在数据库中，如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">user_info</span> <span class="k">WHERE</span> <span class="n">student_ID</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><table>
+<thead>
+<tr>
+<th>student_ID</th>
+<th>name</th>
+<th>age</th>
+<th>created_time</th>
+<th>delete_time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Alice</td>
+<td>18</td>
+<td>12</td>
+<td>14</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bob</td>
+<td>20</td>
+<td>11</td>
+<td>15</td>
+</tr>
+<tr>
+<td>3</td>
+<td>David</td>
+<td>19</td>
+<td>16</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Jeff</td>
+<td>22</td>
+<td>14</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<p>下面举个INSERT的例子，执行如下语句</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">user_info</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;</span><span class="s1">John</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;</span><span class="s1">23</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>那么就会新添加一条记录如下</p>
+<table>
+<thead>
+<tr>
+<th>student_ID</th>
+<th>name</th>
+<th>age</th>
+<th>created_time</th>
+<th>delete_time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Alice</td>
+<td>18</td>
+<td>12</td>
+<td>14</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bob</td>
+<td>20</td>
+<td>11</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>David</td>
+<td>19</td>
+<td>16</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Jeff</td>
+<td>22</td>
+<td>14</td>
+<td>16</td>
+</tr>
+<tr>
+<td>5</td>
+<td>John</td>
+<td>23</td>
+<td>15</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>SELECT也举个例子吧，执行如下语句</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">user_info</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>那么只会返回</p>
+<table>
+<thead>
+<tr>
+<th>student_ID</th>
+<th>name</th>
+<th>age</th>
+<th>created_time</th>
+<th>delete_time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Alice</td>
+<td>18</td>
+<td>12</td>
+<td>14</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bob</td>
+<td>20</td>
+<td>11</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Jeff</td>
+<td>22</td>
+<td>14</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<p>保存着两个额外的系统版本号，使大多数读操作都可以不用加锁。这样设计使得读操作简单，性能强，并且保证只会读取到符合标准的行。不足之处是没行记录都需要额外的存储空间，需要做更多的检查工作，以及一些额外的维护工作。</p>
+<a class="post-dummy-target" id="heading1"></a><h2>需要注意的是</h2>
+<p><strong>MVCC只在REPEATABLE READ和READ COMMITTED两个隔离级别下工作。其他两个隔离级别都和MVCC不兼容，因为READ UNCOMMITTED总是读取最新的数据行，而不是符合当前事务版本的数据行，而SERIALIZABLE会对所有读取到的行都加锁</strong>。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>本文于 2020-03-30 更新</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share"><span><a href="//twitter.com/share?url=%2f2020%2f03%2fmvcc%2f&amp;text=Mvcc&amp;via=" target="_blank" title="分享到 Twitter">
+            <i class="fab fa-twitter fa-fw"></i>
+        </a><a href="//www.facebook.com/sharer/sharer.php?u=%2f2020%2f03%2fmvcc%2f" target="_blank" title="分享到 Facebook">
+            <i class="fab fa-facebook-square fa-fw"></i>
+        </a><a href="//reddit.com/submit?url=%2f2020%2f03%2fmvcc%2f&amp;title=Mvcc" target="_blank" title="分享到 Reddit">
+            <i class="fab fa-reddit fa-fw"></i>
+        </a><a href="//service.weibo.com/share/share.php?url=%2f2020%2f03%2fmvcc%2f&amp;appkey=&amp;title=Mvcc" target="_blank" title="分享到 Weibo">
+            <i class="fab fa-weibo fa-fw"></i>
+        </a></span></div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section><span class="tag">
+                        <a href="/tags/mysql/"><i class="fas fa-tag fa-fw"></i>&nbsp;MySQL</a>&nbsp;
+                    </span><span class="tag">
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fas fa-tag fa-fw"></i>&nbsp;数据库</a>&nbsp;
+                    </span></section>
+        <section>
+            <span><a href="javascript:window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/03/nfs/" class="prev" rel="prev" title="数据库三范式"><i class="fas fa-angle-left fa-fw"></i>数据库三范式</a></div>
+</div>
+<div class="comment"></div>
+    </article></div>
+            </main><footer class="footer">
+    <div class="copyright"><div class="copyright-line">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="external nofollow noopener noreffer">LoveIt<i class="far fa-heart fa-fw"></i></a>
+        </div>
+
+        <div class="copyright-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+    </div>
+</footer>
+</div><a href="#" class="dynamic-to-top" id="dynamic-to-top" data-scroll>
+            <span>&nbsp;</span>
+        </a><script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "\\(", right: "\\)", display: false },
+                    { left: "\\[", right: "\\]", display: true },{ left: "$", right: "$", display: false },]
+            });
+        });
+    </script><link rel="stylesheet" href="/css/lib/katex/katex.min.css"><link rel="stylesheet" href="/css/lib/katex/copy-tex.min.css"><script src="/js/lib/jquery/jquery.slim.min.js"></script><script src="/js/lib/lazysizes/lazysizes.min.js"></script><script src="/js/lib/smooth-scroll/smooth-scroll.polyfills.min.js"></script><script src="/js/lib/katex/katex.min.js"></script><script src="/js/lib/katex/auto-render.min.js"></script><script src="/js/lib/katex/copy-tex.min.js"></script><script src="/js/lib/katex/mhchem.min.js"></script><script src="/js/theme.min.js"></script></body>
+</html>

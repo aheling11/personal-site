@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>TCP的流量控制机制以及拥塞控制机制 | Jeffrey&#39;s Blog</title>
+        <meta name="Description" content="About LoveIt Theme"><meta property="og:title" content="TCP的流量控制机制以及拥塞控制机制" />
+<meta property="og:description" content="流量控制机制 什么是流量控制？流量控制的目的？ 如果发送者发送数据过快，接收者来不及接收，那么就会有分组丢失。为了避免分组丢失，控制发送者的发送速度，使得接收者来得及接收，这就是流量控制。流量控制根本目的是防止分组丢失，它是构成TCP可靠性的一方面。
+如何实现流量控制 在TCP协议中，流量控制是通过滑动窗口协议来实现的。滑动窗口协议既保证了分组无差错、有序接收，也实现了流量控制。
+滑动窗口之前 IP层协议属于不可靠的协议，IP层并不关心据是否发送到了对端，所以我们需要通过确认机制来保证数据传输的可靠性，在比较早的时候使用的是send&ndash;wait&ndash;send的模式，其实这种模式叫做stop-wait模式，发送数据方在发送数据之后会启动定时器，定时器到期之后，收不到ACK就认为发送出现状况，要进行重传。每次发一组数据都要等待收到ACK才会进行下一次发送，很明显这种方法传输效率会很低，如下图所示，这种方式被称为 positive acknowledgment with retransmission (PAR)
+
+滑动窗口的原理 所以TCP协议一般会一次发送很多个包，每个包都有一个序列号sequence number" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2020/04/tcp_reliable/" />
+<meta property="article:published_time" content="2020-04-04T00:00:09+08:00" />
+<meta property="article:modified_time" content="2020-04-04T00:00:09+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="TCP的流量控制机制以及拥塞控制机制"/>
+<meta name="twitter:description" content="流量控制机制 什么是流量控制？流量控制的目的？ 如果发送者发送数据过快，接收者来不及接收，那么就会有分组丢失。为了避免分组丢失，控制发送者的发送速度，使得接收者来得及接收，这就是流量控制。流量控制根本目的是防止分组丢失，它是构成TCP可靠性的一方面。
+如何实现流量控制 在TCP协议中，流量控制是通过滑动窗口协议来实现的。滑动窗口协议既保证了分组无差错、有序接收，也实现了流量控制。
+滑动窗口之前 IP层协议属于不可靠的协议，IP层并不关心据是否发送到了对端，所以我们需要通过确认机制来保证数据传输的可靠性，在比较早的时候使用的是send&ndash;wait&ndash;send的模式，其实这种模式叫做stop-wait模式，发送数据方在发送数据之后会启动定时器，定时器到期之后，收不到ACK就认为发送出现状况，要进行重传。每次发一组数据都要等待收到ACK才会进行下一次发送，很明显这种方法传输效率会很低，如下图所示，这种方式被称为 positive acknowledgment with retransmission (PAR)
+
+滑动窗口的原理 所以TCP协议一般会一次发送很多个包，每个包都有一个序列号sequence number"/>
+<meta name="theme-color" content="#ffffff">
+<meta name="msapplication-TileColor" content="#da532c">
+<link rel="canonical" href="/2020/04/tcp_reliable/" />
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="prev" href="/2020/03/mvcc/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/css/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/css/lib/forkawesome/fork-awesome.min.css"><link rel="stylesheet" href="/css/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "TCP的流量控制机制以及拥塞控制机制",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/2020\/04\/tcp_reliable\/"
+        },"image": {
+                "@type": "ImageObject",
+                "url": "\/cover.png",
+                "width":  800 ,
+                "height":  600 
+            },"genre": "posts","wordcount":  15 ,
+        "url": "\/2020\/04\/tcp_reliable\/","datePublished": "2020-04-04T00:00:09\x2b08:00","dateModified": "2020-04-04T00:00:09\x2b08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+                "@type": "Organization",
+                "name": "xxxx",
+                "logo": {
+                "@type": "ImageObject",
+                "url": "\/logo.png",
+                "width":  127 ,
+                "height":  40 
+                }
+            },"description": ""
+    }
+    </script></head>
+    <body><script>
+            if (!window.localStorage || !window.localStorage.getItem('theme')) {window.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;} else {
+                window.isDark = (window.localStorage && window.localStorage.getItem('theme')) === 'dark';
+            }
+            window.isDark && document.body.classList.add('dark-theme');
+        </script><div class="wrapper"><header class="desktop">
+    <div class="header-wrapper">
+        <div class="header-title animated bounceIn">
+            <a href="/">Jeffrey&#39;s Blog</a>
+        </div>
+        <div class="menu"><a class="menu-item" href="/posts" title="">文章</a><a class="menu-item" href="/tags" title="">标签</a><a class="menu-item" href="/categories" title="">分类</a><a class="menu-item" href="/about" title="">关于</a><a href="javascript:void(0);" class="theme-switch"><i class="fas fa-adjust fa-rotate-180 fa-fw" title="切换主题"></i></a>
+        </div>
+    </div>
+</header><header class="mobile">
+    <div class="header-wrapper">
+        <div class="header-container">
+            <div class="header-title animated bounceIn">
+                <a href="/">Jeffrey&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts" title="">文章</a><a class="menu-item" href="/tags" title="">标签</a><a class="menu-item" href="/categories" title="">分类</a><a class="menu-item" href="/about" title="">关于</a><a href="javascript:void(0);" class="theme-switch"><i class="fas fa-adjust fa-rotate-180 fa-fw" title="切换主题"></i></a>
+        </div>
+    </div>
+</header>
+<main class="main">
+                <div class="container"><article class="page single"><h1 class="single-title animated flipInX">TCP的流量控制机制以及拥塞控制机制</h1><div class="meta">
+            <div class="meta-line"><a class="author" href="/" rel="author" target="_blank">
+                    <i class="fas fa-user-circle fa-fw"></i>xxxx
+                </a>&nbsp;</div>
+            <div class="meta-line"><i class="far fa-calendar-alt fa-fw"></i><time datetime=2020-04-04>2020-04-04</time>&nbsp;
+                <i class="fas fa-pencil-alt fa-fw"></i>约 15 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>预计阅读 1 分钟&nbsp;</div>
+        </div><div class="content"><a class="post-dummy-target" id="heading"></a><h2>流量控制机制</h2>
+<a class="post-dummy-target" id="heading1"></a><h3>什么是流量控制？流量控制的目的？</h3>
+<p>如果发送者发送数据过快，接收者来不及接收，那么就会有分组丢失。为了避免分组丢失，控制发送者的发送速度，使得接收者来得及接收，这就是流量控制。流量控制根本目的是防止分组丢失，它是构成TCP可靠性的一方面。</p>
+<a class="post-dummy-target" id="heading2"></a><h3>如何实现流量控制</h3>
+<p>在TCP协议中，流量控制是通过滑动窗口协议来实现的。滑动窗口协议既保证了<strong>分组无差错</strong>、<strong>有序接收</strong>，也实现了<strong>流量控制</strong>。</p>
+<a class="post-dummy-target" id="heading3"></a><h3>滑动窗口之前</h3>
+<p>IP层协议属于不可靠的协议，IP层并不关心据是否发送到了对端，所以我们需要通过确认机制来保证数据传输的可靠性，在比较早的时候使用的是send&ndash;wait&ndash;send的模式，其实这种模式叫做stop-wait模式，发送数据方在发送数据之后会启动定时器，定时器到期之后，收不到ACK就认为发送出现状况，要进行重传。每次发一组数据都要等待收到ACK才会进行下一次发送，很明显这种方法传输效率会很低，如下图所示，这种方式被称为 positive acknowledgment with retransmission (PAR)</p>
+<p><a href="https://imgchr.com/i/GwIyGT"><img src="https://s1.ax1x.com/2020/04/04/GwIyGT.png" alt="GwIyGT.png"></a></p>
+<a class="post-dummy-target" id="heading4"></a><h3>滑动窗口的原理</h3>
+<p>所以TCP协议一般会一次发送很多个包，每个包都有一个序列号sequence number</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>本文于 2020-04-04 更新</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share"><span><a href="//twitter.com/share?url=%2f2020%2f04%2ftcp_reliable%2f&amp;text=TCP%e7%9a%84%e6%b5%81%e9%87%8f%e6%8e%a7%e5%88%b6%e6%9c%ba%e5%88%b6%e4%bb%a5%e5%8f%8a%e6%8b%a5%e5%a1%9e%e6%8e%a7%e5%88%b6%e6%9c%ba%e5%88%b6&amp;via=" target="_blank" title="分享到 Twitter">
+            <i class="fab fa-twitter fa-fw"></i>
+        </a><a href="//www.facebook.com/sharer/sharer.php?u=%2f2020%2f04%2ftcp_reliable%2f" target="_blank" title="分享到 Facebook">
+            <i class="fab fa-facebook-square fa-fw"></i>
+        </a><a href="//reddit.com/submit?url=%2f2020%2f04%2ftcp_reliable%2f&amp;title=TCP%e7%9a%84%e6%b5%81%e9%87%8f%e6%8e%a7%e5%88%b6%e6%9c%ba%e5%88%b6%e4%bb%a5%e5%8f%8a%e6%8b%a5%e5%a1%9e%e6%8e%a7%e5%88%b6%e6%9c%ba%e5%88%b6" target="_blank" title="分享到 Reddit">
+            <i class="fab fa-reddit fa-fw"></i>
+        </a><a href="//service.weibo.com/share/share.php?url=%2f2020%2f04%2ftcp_reliable%2f&amp;appkey=&amp;title=TCP%e7%9a%84%e6%b5%81%e9%87%8f%e6%8e%a7%e5%88%b6%e6%9c%ba%e5%88%b6%e4%bb%a5%e5%8f%8a%e6%8b%a5%e5%a1%9e%e6%8e%a7%e5%88%b6%e6%9c%ba%e5%88%b6" target="_blank" title="分享到 Weibo">
+            <i class="fab fa-weibo fa-fw"></i>
+        </a></span></div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section></section>
+        <section>
+            <span><a href="javascript:window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/03/mvcc/" class="prev" rel="prev" title="MySQL | 浅谈Mvcc机制"><i class="fas fa-angle-left fa-fw"></i>MySQL | 浅谈Mvcc机制</a></div>
+</div>
+<div class="comment"></div>
+    </article></div>
+            </main><footer class="footer">
+    <div class="copyright"><div class="copyright-line">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreffer">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="external nofollow noopener noreffer">LoveIt<i class="far fa-heart fa-fw"></i></a>
+        </div>
+
+        <div class="copyright-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2020</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+    </div>
+</footer>
+</div><a href="#" class="dynamic-to-top" id="dynamic-to-top" data-scroll>
+            <span>&nbsp;</span>
+        </a><script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "\\(", right: "\\)", display: false },
+                    { left: "\\[", right: "\\]", display: true },{ left: "$", right: "$", display: false },]
+            });
+        });
+    </script><link rel="stylesheet" href="/css/lib/katex/katex.min.css"><link rel="stylesheet" href="/css/lib/katex/copy-tex.min.css"><script src="/js/lib/jquery/jquery.slim.min.js"></script><script src="/js/lib/lazysizes/lazysizes.min.js"></script><script src="/js/lib/smooth-scroll/smooth-scroll.polyfills.min.js"></script><script src="/js/lib/katex/katex.min.js"></script><script src="/js/lib/katex/auto-render.min.js"></script><script src="/js/lib/katex/copy-tex.min.js"></script><script src="/js/lib/katex/mhchem.min.js"></script><script src="/js/theme.min.js"></script></body>
+</html>

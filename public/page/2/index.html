@@ -11,7 +11,7 @@
 <meta property="og:description" content="About LoveIt Theme" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/" />
-<meta property="og:updated_time" content="2020-04-04T00:00:09+08:00" />
+<meta property="og:updated_time" content="2020-06-19T16:18:47+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Jeffrey&#39;s Blog"/>
 <meta name="twitter:description" content="About LoveIt Theme"/>
@@ -74,6 +74,21 @@
         <i class="far fa-envelope fa-fw" title="Email"></i>
     </a></div>
 </div>
+<article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
+        <a href="/2020/02/arraylist_analysis/">ArrayList源码分析</a>
+    </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
+            <i class="fas fa-user-circle fa-fw"></i>xxxx
+        </a>发布于  <time datetime=2020-02-16>2020-02-16</time>&nbsp;</div><div class="content">概述 本文将从几个常用方法入手，来阅读ArrayList的源码，读完一部分后就会进行总结。
+按照从构造方法-&gt;常用API（增、 删、改、查）的顺序来阅读源码。
+概要 ArrayList是动态数组，它是线程不安全的，允许元素是null。
+ArrayList是继承自AbstractList类，实现了List&lt;E&gt;, RandomAccess, Cloneable, java.io.Serializable接口，其中RandomAccess代表了其拥有随机快速访问的能力，ArrayList可以以O(1)的时间复杂度去根据下标访问元素。
+因为其底层数据结构是数组，可想而知，它是占据一块连续的内存空间，所以也有数组的缺点，空间效率不高。
+由于数组的内存连续，可以根据下标以O(的时间读写(改查)元素，因此时间效率很高。
+当集合中的元素超出这个容量，便会进行扩容操作。扩容操作也是ArrayList 的一个性能消耗比较大的地方，所以若我们可以提前预知数据的规模，应该通过public ArrayList(int initialCapacity) {}构造方法，指定集合的大小，去构建ArrayList实例，以减少扩容次数，提高效率。
+或者在需要扩容的时候，手动调用public void ensureCapacity(int minCapacity) {}方法扩容。 不过该方法是ArrayList的API，不是List接口里的，所以使用时需要强转: ((ArrayList)list).ensureCapacity(30);
+构造方法 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44  //默认构造方法中的空数组 private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {}; // 底层真正存储数据的数组 transient Object[] elementData; //默认构造方法 public ArrayList() { this.</div><div class="post-footer">
+        <a href="/2020/02/arraylist_analysis/">阅读全文</a></div>
+</article>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/2020/02/fre-ques/">常见算法题</a>
     </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">

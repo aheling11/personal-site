@@ -75,16 +75,16 @@
     </a></div>
 </div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/2020/06/test/">leetcode 209. 长度最小的子数组</a>
+        <a href="/2020/06/leetcode209/">leetcode 209. 长度最小的子数组</a>
     </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
-            <i class="fas fa-user-circle fa-fw"></i>xxxx
+            <i class="fas fa-user-circle fa-fw"></i>HeLing
         </a>发布于  <time datetime=2020-06-19>2020-06-19</time>&nbsp;<span class="post-category">收录于&nbsp;<i class="far fa-folder fa-fw"></i>
                         <a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a></span></div><div class="content">问题描述 给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的连续子数组，并返回其长度。如果不存在符合条件的连续子数组，返回 0。
 示例：
 输入：s = 7, nums = [2,3,1,2,4,3] 输出：2 解释：子数组 [4,3] 是该条件下的长度最小的连续子数组。
 问题分析 使用滑动窗口的思想，双指针
 Solution 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18  public int minSubArrayLen(int s, int[] nums) { if(nums.length &lt; 1){ return 0; } int minlength = Integer.MAX_VALUE; int left = 0; int right = 0; int sum = 0; while(right &lt; nums.</div><div class="post-footer">
-        <a href="/2020/06/test/">阅读全文</a><div class="post-tags"><span class="tag">
+        <a href="/2020/06/leetcode209/">阅读全文</a><div class="post-tags"><span class="tag">
                         &nbsp;<a href="/tags/%E5%8F%8C%E6%8C%87%E9%92%88/"><i class="fas fa-tag fa-fw"></i>&nbsp;双指针</a>
                     </span><span class="tag">
                         &nbsp;<a href="/tags/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/"><i class="fas fa-tag fa-fw"></i>&nbsp;滑动窗口</a>

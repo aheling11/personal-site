@@ -1,16 +1,5 @@
----
-title: "leetcode 718. 最长重复子数组"
-date: 2020-07-02T16:18:47+08:00
-draft: false
-Author: HeLing
-tags: [
-  "双指针",
-  "滑动窗口"
-]
-categories: [
-  "修炼内功",
-]
----
+# leetcode 718. 最长重复子数组
+
 
 
 
@@ -60,4 +49,5 @@ public int findLength(int[] A, int[] B) {
 
     }
 ```
+
 

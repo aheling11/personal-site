@@ -7,17 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 19 Jun 2020 16:18:47 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 02 Jul 2020 16:18:47 +0800</lastBuildDate>
     
 	<atom:link href="/tags/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>leetcode 718. 最长重复子数组</title>
+      <link>/2020/07/leetcode209/</link>
+      <pubDate>Thu, 02 Jul 2020 16:18:47 +0800</pubDate>
+      
+      <guid>/2020/07/leetcode209/</guid>
+      <description>问题描述 给两个整数数组 A 和 B ，返回两个数组中公共的、长度最长的子数组的长度。
+示例 1:
+1 2 3 4 5 6  输入: A: [1,2,3,2,1] B: [3,2,1,4,7] 输出: 3 解释: 长度最长的公共子数组是 [3, 2, 1]。   问题分析 使用动态规划的思想可解
+DP思路：
+如果只看A和B
+Solution 1 2 3 4 5 6 7 8 9 10 11 12 13 14  public int findLength(int[] A, int[] B) { int[][] dp = new int[A.length + 1][B.length + 1]; int result = 0; for(int i = 1; i &amp;lt;= A.</description>
+    </item>
+    
+    <item>
       <title>leetcode 209. 长度最小的子数组</title>
-      <link>/2020/06/leetcode209/</link>
+      <link>/2020/06/leetcode718.-%E6%9C%80%E9%95%BF%E9%87%8D%E5%A4%8D%E5%AD%90%E6%95%B0%E7%BB%84/</link>
       <pubDate>Fri, 19 Jun 2020 16:18:47 +0800</pubDate>
       
-      <guid>/2020/06/leetcode209/</guid>
+      <guid>/2020/06/leetcode718.-%E6%9C%80%E9%95%BF%E9%87%8D%E5%A4%8D%E5%AD%90%E6%95%B0%E7%BB%84/</guid>
       <description>问题描述 给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的连续子数组，并返回其长度。如果不存在符合条件的连续子数组，返回 0。
 示例：
 输入：s = 7, nums = [2,3,1,2,4,3] 输出：2 解释：子数组 [4,3] 是该条件下的长度最小的连续子数组。

@@ -1,7 +1,7 @@
 ---
 title: "数据库三范式"
 date: 2020-03-21T13:06:08+08:00
-Author: "He Ling"
+Author: "Jeffrey"
 draft: false
 tags: [
   "数据库",

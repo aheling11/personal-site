@@ -1,7 +1,7 @@
 ---
 title: "链表题汇总"
 date: 2020-02-15T21:23:15+08:00
-Author: HeLing
+Author: Jeffrey
 tags: [
   "链表",
   "数据结构"

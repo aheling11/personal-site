@@ -2,7 +2,7 @@
 title: "Java中equals()和'=='和hashCode()的联系"
 date: 2020-03-03T17:11:48+08:00
 draft: false
-Author: HeLing
+Author: Jeffrey
 tags: [
   "Java",
   "基础",

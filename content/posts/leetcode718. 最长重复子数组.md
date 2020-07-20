@@ -2,7 +2,7 @@
 title: "leetcode 209. 长度最小的子数组"
 date: 2020-06-19T16:18:47+08:00
 draft: false
-Author: HeLing
+Author: Jeffrey
 tags: [
   "双指针",
   "滑动窗口"

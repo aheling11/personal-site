@@ -2,7 +2,7 @@
 title: "MySQL | 浅谈Mvcc机制"
 date: 2020-03-30T16:19:40+08:00
 draft: false
-Author: HeLing
+Author: Jeffrey
 tags: [
   "MySQL",
   "数据库",

@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>BloomFilter | Jeffrey&#39;s Blog</title>
-        <meta name="Description" content="About LoveIt Theme"><meta property="og:title" content="BloomFilter" />
+        <title>布隆过滤器 | Jeffrey&#39;s Blog</title>
+        <meta name="Description" content="About LoveIt Theme"><meta property="og:title" content="布隆过滤器" />
 <meta property="og:description" content="布隆过滤器（Bloom Filter） 应用背景 在我们开发软件的过程中，在很多场景下，我们都需要一个能迅速判断一个元素是否在一个集合中。譬如：
   网页爬虫对URL的去重，避免爬取相同的URL地址
   反垃圾邮件，从数十亿个垃圾邮件列表中判断某邮箱是否垃圾邮箱（同理，垃圾短信）
@@ -29,7 +29,7 @@ Ok，我们现在再存一个值 “tencent”，如果哈希函数返回 3、4�
 <meta property="article:published_time" content="2020-07-16T20:12:40+08:00" />
 <meta property="article:modified_time" content="2020-07-16T20:12:40+08:00" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="BloomFilter"/>
+<meta name="twitter:title" content="布隆过滤器"/>
 <meta name="twitter:description" content="布隆过滤器（Bloom Filter） 应用背景 在我们开发软件的过程中，在很多场景下，我们都需要一个能迅速判断一个元素是否在一个集合中。譬如：
   网页爬虫对URL的去重，避免爬取相同的URL地址
   反垃圾邮件，从数十亿个垃圾邮件列表中判断某邮箱是否垃圾邮箱（同理，垃圾短信）
@@ -55,11 +55,11 @@ Ok，我们现在再存一个值 “tencent”，如果哈希函数返回 3、4�
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="prev" href="/2020/07/leetcode209/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/css/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/css/lib/forkawesome/fork-awesome.min.css"><link rel="stylesheet" href="/css/lib/animate/animate.min.css"><script type="application/ld+json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="prev" href="/2020/07/leetcode209/" /><link rel="next" href="/2020/07/countminsketch/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/css/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/css/lib/forkawesome/fork-awesome.min.css"><link rel="stylesheet" href="/css/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "BloomFilter",
+        "headline": "布隆过滤器",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "\/2020\/07\/bloomfilter\/"
@@ -109,9 +109,9 @@ Ok，我们现在再存一个值 “tencent”，如果哈希函数返回 3、4�
     </div>
 </header>
 <main class="main">
-                <div class="container"><article class="page single"><h1 class="single-title animated flipInX">BloomFilter</h1><div class="meta">
+                <div class="container"><article class="page single"><h1 class="single-title animated flipInX">布隆过滤器</h1><div class="meta">
             <div class="meta-line"><a class="author" href="/" rel="author" target="_blank">
-                    <i class="fas fa-user-circle fa-fw"></i>HeLing
+                    <i class="fas fa-user-circle fa-fw"></i>Jeffrey
                 </a>&nbsp;<span class="post-category">收录于&nbsp;<i class="far fa-folder fa-fw"></i><a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a>&nbsp;</span></div>
             <div class="meta-line"><i class="far fa-calendar-alt fa-fw"></i><time datetime=2020-07-16>2020-07-16</time>&nbsp;
                 <i class="fas fa-pencil-alt fa-fw"></i>约 112 字&nbsp;
@@ -179,13 +179,13 @@ Ok，我们现在再存一个值 “tencent”，如果哈希函数返回 3、4�
         </div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
-            <div class="post-info-share"><span><a href="//twitter.com/share?url=%2f2020%2f07%2fbloomfilter%2f&amp;text=BloomFilter&amp;via=" target="_blank" title="分享到 Twitter">
+            <div class="post-info-share"><span><a href="//twitter.com/share?url=%2f2020%2f07%2fbloomfilter%2f&amp;text=%e5%b8%83%e9%9a%86%e8%bf%87%e6%bb%a4%e5%99%a8&amp;via=" target="_blank" title="分享到 Twitter">
             <i class="fab fa-twitter fa-fw"></i>
         </a><a href="//www.facebook.com/sharer/sharer.php?u=%2f2020%2f07%2fbloomfilter%2f" target="_blank" title="分享到 Facebook">
             <i class="fab fa-facebook-square fa-fw"></i>
-        </a><a href="//reddit.com/submit?url=%2f2020%2f07%2fbloomfilter%2f&amp;title=BloomFilter" target="_blank" title="分享到 Reddit">
+        </a><a href="//reddit.com/submit?url=%2f2020%2f07%2fbloomfilter%2f&amp;title=%e5%b8%83%e9%9a%86%e8%bf%87%e6%bb%a4%e5%99%a8" target="_blank" title="分享到 Reddit">
             <i class="fab fa-reddit fa-fw"></i>
-        </a><a href="//service.weibo.com/share/share.php?url=%2f2020%2f07%2fbloomfilter%2f&amp;appkey=&amp;title=BloomFilter" target="_blank" title="分享到 Weibo">
+        </a><a href="//service.weibo.com/share/share.php?url=%2f2020%2f07%2fbloomfilter%2f&amp;appkey=&amp;title=%e5%b8%83%e9%9a%86%e8%bf%87%e6%bb%a4%e5%99%a8" target="_blank" title="分享到 Weibo">
             <i class="fab fa-weibo fa-fw"></i>
         </a></span></div>
         </div>
@@ -202,7 +202,8 @@ Ok，我们现在再存一个值 “tencent”，如果哈希函数返回 3、4�
         </section>
     </div>
 
-    <div class="post-nav"><a href="/2020/07/leetcode209/" class="prev" rel="prev" title="leetcode 718. 最长重复子数组"><i class="fas fa-angle-left fa-fw"></i>leetcode 718. 最长重复子数组</a></div>
+    <div class="post-nav"><a href="/2020/07/leetcode209/" class="prev" rel="prev" title="leetcode 718. 最长重复子数组"><i class="fas fa-angle-left fa-fw"></i>leetcode 718. 最长重复子数组</a>
+            <a href="/2020/07/countminsketch/" class="next" rel="next" title="Count-Min Sketch算法">Count-Min Sketch算法<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 <div class="comment"></div>
     </article></div>

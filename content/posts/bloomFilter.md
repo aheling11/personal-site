@@ -1,8 +1,8 @@
 ---
-title: "BloomFilter"
+title: "布隆过滤器"
 date: 2020-07-16T20:12:40+08:00
 draft: false
-Author: HeLing
+Author: Jeffrey
 tags: [
   "算法",
   "数据结构",

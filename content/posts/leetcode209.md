@@ -2,7 +2,7 @@
 title: "leetcode 718. 最长重复子数组"
 date: 2020-07-02T16:18:47+08:00
 draft: false
-Author: HeLing
+Author: Jeffrey
 tags: [
   "双指针",
   "滑动窗口"

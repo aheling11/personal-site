@@ -11,7 +11,7 @@
 <meta property="og:description" content="About LoveIt Theme" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/" />
-<meta property="og:updated_time" content="2020-07-16T20:12:40+08:00" />
+<meta property="og:updated_time" content="2020-07-19T20:10:08+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Jeffrey&#39;s Blog"/>
 <meta name="twitter:description" content="About LoveIt Theme"/>
@@ -75,9 +75,36 @@
     </a></div>
 </div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
+        <a href="/2020/03/nfs/">数据库三范式</a>
+    </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
+            <i class="fas fa-user-circle fa-fw"></i>Jeffrey
+        </a>发布于  <time datetime=2020-03-21>2020-03-21</time>&nbsp;</div><div class="content">第一范式（1NF） 强调的是列的原子性，即列不能再分为其他列
+考虑这样一张表【联系人】（电话，地址，姓名）。
+其中电话可以分为家庭电话和公司电话，所以这张表没有达到1NF。
+要符合1NF，只需要改成【联系人】（家庭电话，公司电话，地址，姓名）就行了
+在实际工作中，当我们拿出一个表设计的时候，可以看成已经符合 1NF 了。为什么说&quot;可以看成&quot;呢？举个例子，假设我们的关系中有个属性 address，是由 province city street 组成的。如果我们是物流行业，以后会按省份或城市进行分析，在这样的场景下 address 就是可分的，那这样的设计就不符合 1NF。如果我们业务中地址只是用作一下展示，那么 address 作为一个整体就不必细分了。重点不在于域本身，而在于业务场景中要如何使用域。
+第二范式（2NF） 首先要满足1NF，然后在此基础上满足两个条件
+  有主键
+  没有包含在主键中的列都必须完全依赖于主键，而不能只依赖主键的一部分，即不能有部分依赖
+  考虑一个订单明细表：【OrderDetail】（OrderID，ProductID，UnitPrice，Discount，Quantity，ProductName）
+其中，（OrderID，ProductID）是主键，而UnitPrice，ProductName是依赖于ProductID的，和OrderID没关系，这样就产生了部分依赖，不满足2NF。
+可以把【OrderDetail】表拆分为【OrderDetail】（OrderID，ProductID，Discount，Quantity）和【Product】（ProductID，UnitPrice，ProductName）来消除原订单表中UnitPrice，ProductName多次重复的情况。
+第三范式（3NF） 在1NF基础上，任何非主属性不依赖于其它非主属性[在2NF基础上消除传递依赖]。
+第三范式（3NF）是第二范式（2NF）的一个子集，即满足第三范式（3NF）必须满足第二范式（2NF）。
+例如，非主键列A依赖于非主键列B，而非主键列B依赖于主键，这就属于传递依赖。
+考虑一个订单表【Order】（OrderID，OrderDate，CustomerID，CustomerName，CustomerAddr，CustomerCity）主键是（OrderID）。
+其中 OrderDate，CustomerID，CustomerName，CustomerAddr，CustomerCity 等非主键列都完全依赖于主键（OrderID），所以符合 2NF。
+但其中CustomerName，CustomerAddr，CustomerCity都依赖于非主键列CustomerID，而CustomerID依赖于OrderID。CustomerName，CustomerAddr，CustomerCity是通过传递才依赖于主键，所以不符合 3NF。
+通过拆分【Order】为【Order】（OrderID，OrderDate，CustomerID）和【Customer】（CustomerID，CustomerName，CustomerAddr，CustomerCity）从而达到 3NF。
+总结 范式只是一个工具。它的提出是为了帮助我们减少数据库的冗余性，在设计阶段为我们提供思考上的便利。前面的介绍中也可以看出，并不是一定要苛求&quot;精确地&quot;符合范式，我们最终的目的，还是要根据业务场景设计出合适的结构。</div><div class="post-footer">
+        <a href="/2020/03/nfs/">阅读全文</a><div class="post-tags"><span class="tag">
+                        &nbsp;<a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fas fa-tag fa-fw"></i>&nbsp;数据库</a>
+                    </span></div></div>
+</article>
+<article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/2020/03/hashcode_equals/">Java中equals()和&#39;==&#39;和hashCode()的联系</a>
     </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
-            <i class="fas fa-user-circle fa-fw"></i>HeLing
+            <i class="fas fa-user-circle fa-fw"></i>Jeffrey
         </a>发布于  <time datetime=2020-03-03>2020-03-03</time>&nbsp;</div><div class="content">Java 是值传递还是引用传递? Java只有值传递
 == 与 equals()的区别 == ：它的作用是比较两个对象的地址是不是相同，判断两个对象是不是同一个对象(基本数据类型==比较的是值，引用数据类型比较的是内存地址)
 equals()：它的作用也是比较两个对象是否相等。但它一般有两种使用情况：
@@ -128,7 +155,7 @@ ArrayList是继承自AbstractList类，实现了List&lt;E&gt;, RandomAccess, Clo
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/2020/02/fre-ques/">常见算法题</a>
     </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
-            <i class="fas fa-user-circle fa-fw"></i>HeLing
+            <i class="fas fa-user-circle fa-fw"></i>Jeffrey
         </a>发布于  <time datetime=2020-02-15>2020-02-15</time>&nbsp;<span class="post-category">收录于&nbsp;<i class="far fa-folder fa-fw"></i>
                         <a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a></span></div><div class="content">[TOC]
 常见题 1. 寻找第K大的值 问题描述  在未排序的数组中找到第 k 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
@@ -151,7 +178,7 @@ Solution   基于partition的方法
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/2020/02/single-linked-questions/">链表题汇总</a>
     </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
-            <i class="fas fa-user-circle fa-fw"></i>HeLing
+            <i class="fas fa-user-circle fa-fw"></i>Jeffrey
         </a>发布于  <time datetime=2020-02-15>2020-02-15</time>&nbsp;<span class="post-category">收录于&nbsp;<i class="far fa-folder fa-fw"></i>
                         <a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a></span></div><div class="content">链表题汇总 [TOC]
 1.反转链表 问题描述  LeetCode: 输入一个链表，反转链表后，输出链表的所有元素。

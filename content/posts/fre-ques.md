@@ -1,7 +1,7 @@
 ---
 title: "常见算法题"
 date: 2020-02-15T22:09:16+08:00
-Author: HeLing
+Author: Jeffrey
 tags: [
   "算法",
   "数据结构",

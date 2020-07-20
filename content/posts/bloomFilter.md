@@ -1,5 +1,5 @@
 ---
-title: "布隆过滤器"
+title: "布隆过滤器(Bloom Filter)"
 date: 2020-07-16T20:12:40+08:00
 draft: false
 Author: Jeffrey

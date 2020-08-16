@@ -11,7 +11,7 @@
 <meta property="og:description" content="About LoveIt Theme" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/" />
-<meta property="og:updated_time" content="2020-07-19T20:10:08+08:00" />
+<meta property="og:updated_time" content="2020-08-12T11:44:08+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Jeffrey&#39;s Blog"/>
 <meta name="twitter:description" content="About LoveIt Theme"/>
@@ -75,12 +75,33 @@
     </a></div>
 </div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
+        <a href="/2020/08/outofmemory/">记一次OOM的错误</a>
+    </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
+            <i class="fas fa-user-circle fa-fw"></i>xxxx
+        </a>发布于  <time datetime=2020-08-12>2020-08-12</time>&nbsp;</div><div class="content">背景故事 深圳阳光灿烂的一天，实习中的我在在进行功能开发时，有一个批量插入数据的需求：前端传参过来歌曲id列表，我这边后端将传来的歌曲插入到目标表中，插入到目标表前要根据歌曲id来补充相应的歌曲信息，如歌曲名字，歌手Id，歌手名字，版权方等等信息。
+异常出现 在我看来是一个比较简单的需求，很快就完成了，把controller写好，接口发布出去，调用接口的时候出现了响应时间很慢，Chrome浏览器里显示该请求一直是在pending中，疑惑的我我查看日志发现，该请求报了java.lang.OutOfMemoryError: Java heap space的错误，我寻思着这是我第一次遇到OOM，兴奋起来了，我倒要看看到底是什么原因
+原因分析 首先我们要分析java.lang.OutOfMemoryError出现的原因：
+Java的自动内存管理依赖GC，GC会一遍又一遍地扫描内存区域, 将不使用的对象删除. 简单来说, Java中的内存泄漏, 就是那些逻辑上不再使用的对象, 却没有被 垃圾收集程序 给干掉. 从而导致垃圾对象继续占用堆内存中, 逐渐堆积, 最后造成 java.lang.OutOfMemoryError:Java heap space 错误。
+那么具体表现为有如下两个原因：
+ 堆内存设置得太小了 程序中出现了占用内存很多的大对象，无法被GC掉  首先排除原因1，因为我们这个项目一直都能很正常运行的，设置的堆内存也够大？首先更应该看下是不是代码写的有问题
+我开始一行行看我写的代码，没看出啥问题
+又转过去看日志，直到发现日志里的sql语句有一个查询，花费了8ms，在一众只花费0.01ms的查询中显得很诡异，于是我去查看该查询对应的代码。终于找到了GC的原因就在这里，如下图所示：
+图中的代码功能是查询版权方信息，根据company_id查询copyright表中的记录，因为每个company_id对应公司的版权方信息都是一样的，所以我直接就取查到的第一个数据的版权信息。
+乍一看没什么问题，但是这个查询查出来的数据量高达14w条，占在内存里GC不掉，于是就OOM了。
+要解决就很简单，加个限制条件limit 1，sql语句查到数据返回就行了。
+如下图所示</div><div class="post-footer">
+        <a href="/2020/08/outofmemory/">阅读全文</a></div>
+</article>
+<article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/2020/07/countminsketch/">Count-Min Sketch算法</a>
     </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
             <i class="fas fa-user-circle fa-fw"></i>Jeffrey
         </a>发布于  <time datetime=2020-07-19>2020-07-19</time>&nbsp;<span class="post-category">收录于&nbsp;<i class="far fa-folder fa-fw"></i>
                         <a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a></span></div><div class="content">Count-Min Sketch算法 应用背景 之前我们有了解过布隆过滤器（Bloom Filter），布隆过滤器可以很好的处理判断海量数据中某元素是否存在的问题，但是布隆过滤器并不能统计元素出现的频率。
-现在假如我们有个这样的需求：</div><div class="post-footer">
+现在假如我们有个这样的需求：统计海量数据中元素的出现频率。
+当然，我们可以选择哈希表存储每个元素出现的次数，但同样的问题，当数据量很大的时候，并不是一个可以接受的解决方式，因为会占用巨大的内存。
+在这种情景下，Count-Min Sketch算法，简称CMS，应运而生，这是一种可以用来解决海量数据中统计频率的方法，类似于布隆过滤器，我们节省了大量内存空间，代价是牺牲掉些许的准确性。
+实现原理 参考材料 https://florian.github.io/count-min-sketch/</div><div class="post-footer">
         <a href="/2020/07/countminsketch/">阅读全文</a><div class="post-tags"><span class="tag">
                         &nbsp;<a href="/tags/%E7%AE%97%E6%B3%95/"><i class="fas fa-tag fa-fw"></i>&nbsp;算法</a>
                     </span><span class="tag">
@@ -88,11 +109,11 @@
                     </span></div></div>
 </article>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/2020/07/bloomfilter/">布隆过滤器</a>
+        <a href="/2020/07/bloomfilter/">布隆过滤器(Bloom Filter)</a>
     </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
             <i class="fas fa-user-circle fa-fw"></i>Jeffrey
         </a>发布于  <time datetime=2020-07-16>2020-07-16</time>&nbsp;<span class="post-category">收录于&nbsp;<i class="far fa-folder fa-fw"></i>
-                        <a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a></span></div><div class="content">布隆过滤器（Bloom Filter） 应用背景 在我们开发软件的过程中，在很多场景下，我们都需要一个能迅速判断一个元素是否在一个集合中。譬如：
+                        <a href="/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/">修炼内功</a></span></div><div class="content">应用背景 在我们开发软件的过程中，在很多场景下，我们都需要一个能迅速判断一个元素是否在一个集合中。譬如：
   网页爬虫对URL的去重，避免爬取相同的URL地址
   反垃圾邮件，从数十亿个垃圾邮件列表中判断某邮箱是否垃圾邮箱（同理，垃圾短信）
   我们可能很快就能想到用哈希表这种数据结构来实现，判断一个数是否存在重复，时间复杂度只要O(1)，拿到要判断的数，hash一下，找到对应的桶位置，看有没有被占用就行了。
@@ -159,36 +180,6 @@ Solution 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18  public int minSubArrayLen
 滑动窗口的原理 所以TCP协议一般会一次发送很多个包，每个包都有一个序列号sequence number</div><div class="post-footer">
         <a href="/2020/04/tcp_reliable/">阅读全文</a></div>
 </article>
-<article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/2020/03/mvcc/">MySQL | 浅谈Mvcc机制</a>
-    </h1><div class="meta"><a class="author" href="/" rel="author" target="_blank">
-            <i class="fas fa-user-circle fa-fw"></i>Jeffrey
-        </a>发布于  <time datetime=2020-03-30>2020-03-30</time>&nbsp;</div><div class="content">开始 最近在读《高性能MySQL》这本书，总结一下MVCC的内容。
-个人观点，如有错误欢迎交流~
-MVCC是什么？ MVCC全称是Multi-Version Concurrency Control，多版本并发控制。基于提升并发性能的考虑，很多数据库包括MySQL，Oracle也都实现了MVCC。
-使用MVCC的好处？ MVCC的最大好处：读不加任何锁，读写不冲突，对于读操作多于写操作的应用，极大的增加了系统的并发性能。
-MVCC是怎样工作的？ 不同存储引擎的MVCC实现是不同的，典型的有乐观（optimistic）并发控制和悲观（pessimistic）并发控制。
-下面通过innoDB的简化版行为来说明MVCC是如何工作的。
-InnoDB的MVCC是通过在每行记录后面保存两个隐藏的列来实现。这两个列，一个保存了行的创建时间，一个保存了行的过期时间（删除时间）。并且存储的并不是真实的时间值，而是系统版本号（system version number）。每开始一个新的事务，系统版本号都会自动递增。事务开始时刻的系统版本号会作为事务的版本号，用来和查询到的每行记录的版本号进行比较。
-MVCC操作流程 下面看一下在REPEATEABLE READ级别下，MVCC是如何具体操作的:
-SELECT
-InnoDB会根据以下两个条件检查没行记录： 1. InnoDB只会查找版本早于当前事务版本的数据行（也就是，行的系统版本小于或等于事务的系统版本号）， 这样可以确保事务读取到的行，要么是事务开始前已经存在的，要么是事务自身插入或者修改过的。 2. 行的删除版本要么未定义，要么大于当前事务的版本号。这样可以确保事务读取到的行，在事务之前未被 删除。 只有符合上述两个条件的记录，才能被作为返回查询结果
-INSERT
-InnoDB为新插入的一行保存当前系统版本号作为行版本号
-DELETE
-InnoDB为删除的每一行保存当前系统版本号作为删除标识
-UPDATE
-UPDATE为插入一行新纪录，保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为删除标识。
-MVCC操作举例 只看文字可能不太好理解，下面我们用实例来说明一下。
-首先要说明的是在MySQL中建表时，每个表都会有三列隐藏记录，其中和MVCC有关系的有两列
- 数据行的版本号 （DB_TRX_ID） 删除版本号 (DB_ROLL_PT)     student_ID name age DB_TRX_ID DB_ROLL_PT             以下是一张学生信息表user_info，表中已经有4行数据，假如我们现在开启一个新事务，当前事务版本为15。
-   student_ID name age DB_TRX_ID DB_ROLL_PT     1 Alice 18 12 14   2 Bob 20 11    3 David 19 16    4 Jeff 22 14 16    我们先说明update操作的逻辑流程，看完update的其实就很好理解这个机制怎么回事了，执行以下语句</div><div class="post-footer">
-        <a href="/2020/03/mvcc/">阅读全文</a><div class="post-tags"><span class="tag">
-                        &nbsp;<a href="/tags/mysql/"><i class="fas fa-tag fa-fw"></i>&nbsp;MySQL</a>
-                    </span><span class="tag">
-                        &nbsp;<a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fas fa-tag fa-fw"></i>&nbsp;数据库</a>
-                    </span></div></div>
-</article>
 <ul class="pagination"><li class="page-item active">
                     <span class="page-link">
                         <a href="/">1</a>
@@ -196,6 +187,10 @@ MVCC操作举例 只看文字可能不太好理解，下面我们用实例来说
                 </li><li class="page-item ">
                     <span class="page-link">
                         <a href="/page/2/">2</a>
+                    </span>
+                </li><li class="page-item ">
+                    <span class="page-link">
+                        <a href="/page/3/">3</a>
                     </span>
                 </li></ul></div></div>
             </main><footer class="footer">

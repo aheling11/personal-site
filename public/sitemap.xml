@@ -2,10 +2,11 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
+            <loc>/</loc><lastmod>2020-08-12T11:44:08+08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
+            <loc>/posts/</loc><lastmod>2020-08-12T11:44:08+08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
+            <loc>/2020/08/outofmemory/</loc><lastmod>2020-08-12T11:44:08+08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>/categories/</loc><lastmod>2020-07-19T20:10:08+08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>/2020/07/countminsketch/</loc><lastmod>2020-07-19T20:10:08+08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>/</loc><lastmod>2020-07-19T20:10:08+08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>/posts/</loc><lastmod>2020-07-19T20:10:08+08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>/tags/</loc><lastmod>2020-07-19T20:10:08+08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>/categories/%E4%BF%AE%E7%82%BC%E5%86%85%E5%8A%9F/</loc><lastmod>2020-07-19T20:10:08+08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc><lastmod>2020-07-19T20:10:08+08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>

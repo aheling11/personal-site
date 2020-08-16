@@ -1,9 +1,5 @@
-# 布隆过滤器
+# 布隆过滤器(Bloom Filter)
 
-
-
-
-# 布隆过滤器（Bloom Filter）
 
 ## 应用背景
 
